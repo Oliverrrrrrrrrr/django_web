@@ -18,16 +18,16 @@
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div id="navcol-1" class="collapse navbar-collapse">
             <ul class="navbar-nav mx-auto" style="padding-right: 0px;">
-                <li class="nav-item"><a class="nav-link active" href="Home.html">主页</a></li>
-                <li class="nav-item"><a class="nav-link" href="import.html">导入文件</a></li>
-                <li class="nav-item"><a class="nav-link" href="Qualification.html">资质检测</a></li>
-                <li class="nav-item"><a class="nav-link" href="Repeatability.html">重复度对比</a></li>
-                <li class="nav-item"><a class="nav-link" href="Predict.html"><span
+                <li class="nav-item"><a class="nav-link active" href={% url 'home' %}>主页</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'import' %}>导入文件</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Qualification' %}>资质检测</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Repeatability' %}>重复度对比</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Predict' %}><span
                         style="color: var(--bs-nav-link-hover-color);">中标概率预测</span></a></li>
                 <li class="nav-item"></li>
-                <li class="nav-item"><a class="nav-link" href="signup.html">注册</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'register' %}>注册</a></li>
             </ul>
-            <a class="btn btn-primary shadow" role="button" href="login.html">登录</a>
+            <a class="btn btn-primary shadow" role="button" href={% url 'login' %}>登录</a>
         </div>
     </div>
 </nav>
@@ -68,7 +68,7 @@
                             <h4 class="fw-bold">资质检测</h4>
                             <p class="text-muted">天眼查、信用中国以及中国政府采购网</p><a class="btn btn-sm px-0"
                                                                                           role="button"
-                                                                                          href="Qualification.html">了解更多 
+                                                                                          href={% url 'Qualification' %}>了解更多 
                             <svg class="bi bi-arrow-right" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                  fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -95,7 +95,7 @@
                         <div>
                             <h4 class="fw-bold">重复度对比</h4>
                             <p class="text-muted">对不同标书进行重复度对比，防止串标行为</p>
-                            <a class="btn btn-sm px-0" role="button" href="Repeatability.html"><strong>了解更多</strong>
+                            <a class="btn btn-sm px-0" role="button" href={% url 'Repeatability' %}><strong>了解更多</strong>
                                 <svg class="bi bi-arrow-right" xmlns="http://www.w3.org/2000/svg" width="1em"
                                      height="1em" fill="currentColor" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
@@ -124,7 +124,7 @@
                         <div>
                             <h4 class="fw-bold">中标概率预测</h4>
                             <p class="text-muted">使用机器学习算法预测标书中标概率</p>
-                            <a class="btn btn-sm px-0" role="button" href="Predict.html">了解更多
+                            <a class="btn btn-sm px-0" role="button" href={% url 'Predict' %}>了解更多
                                 <svg class="bi bi-arrow-right" xmlns="http://www.w3.org/2000/svg" width="1em"
                                      height="1em" fill="currentColor" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
@@ -268,7 +268,7 @@
                         <h3 class="fw-bold pb-md-4">中标概率 <span class="underline"><em>预测准</em></span></h3>
                         <p class="mb-4">通过机器学习算法预测标书中标概率</p>
                         <div class="my-3"><a class="btn btn-warning me-2 mt-2" role="button"
-                                             href="Predict.html">了解更多</a></div>
+                                             href={% url 'Predict' %}>了解更多</a></div>
                     </div>
                 </div>
                 <div class="col-md-6 order-first order-md-last" style="min-height: 250px;"><img

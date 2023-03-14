@@ -15,14 +15,14 @@
         <div class="container"><a class="navbar-brand d-flex align-items-center" href="/"><span>标书雷达</span></a><button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div id="navcol-1" class="collapse navbar-collapse">
                 <ul class="navbar-nav mx-auto" style="padding-right: 0px;">
-                    <li class="nav-item"><a class="nav-link" href="Home.html">主页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="import.html">导入文件</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Qualification.html">资质检测</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Repeatability.html">重复度对比</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Predict.html"><span style="color: var(--bs-nav-link-hover-color);">中标概率预测</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href={% url 'home' %}>主页</a></li>
+                    <li class="nav-item"><a class="nav-link" href={% url 'import' %}>导入文件</a></li>
+                    <li class="nav-item"><a class="nav-link" href={% url 'Qualification' %}>资质检测</a></li>
+                    <li class="nav-item"><a class="nav-link" href={% url 'Repeatability' %}>重复度对比</a></li>
+                    <li class="nav-item"><a class="nav-link" href={% url 'Predict' %}><span style="color: var(--bs-nav-link-hover-color);">中标概率预测</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="signup.html">注册</a></li>
-                </ul><a class="btn btn-primary shadow" role="button" href="login.html">登录</a>
+                    <li class="nav-item"><a class="nav-link" href={% url 'register' %}>注册</a></li>
+                </ul><a class="btn btn-primary shadow" role="button" href={% url 'login' %}>登录</a>
             </div>
         </div>
     </nav>

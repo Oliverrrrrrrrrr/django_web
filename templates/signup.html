@@ -18,16 +18,16 @@
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="navbar-nav mx-auto" style="padding-right: 0px;">
-                <li class="nav-item"><a class="nav-link" href="Home.html">主页</a></li>
-                <li class="nav-item"><a class="nav-link" href="import.html">导入文件</a></li>
-                <li class="nav-item"><a class="nav-link" href="Qualification.html">资质检测</a></li>
-                <li class="nav-item"><a class="nav-link" href="Repeatability.html">重复度对比</a></li>
-                <li class="nav-item"><a class="nav-link" href="Predict.html"><span
+                <li class="nav-item"><a class="nav-link" href={% url 'home' %}>主页</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'import' %}>导入文件</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Qualification' %}>资质检测</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Repeatability' %}>重复度对比</a></li>
+                <li class="nav-item"><a class="nav-link" href={% url 'Predict' %}><span
                         style="color: var(--bs-nav-link-hover-color);">中标概率预测</span></a></li>
                 <li class="nav-item"></li>
-                <li class="nav-item"><a class="nav-link active" href="signup.html">注册</a></li>
+                <li class="nav-item"><a class="nav-link active" href={% url 'register' %}>注册</a></li>
             </ul>
-            <a class="btn btn-primary shadow" role="button" href="login.html">登录</a>
+            <a class="btn btn-primary shadow" role="button" href={% url 'login' %}>登录</a>
         </div>
     </div>
 </nav>
@@ -48,7 +48,7 @@
                     <div class="mb-5">
                         <button class="btn btn-primary shadow" type="submit">创建账户</button>
                     </div>
-                    <p class="text-muted">已有账户？ <a href="login.html">登录&nbsp;<svg
+                    <p class="text-muted">已有账户？ <a href={% url 'login' %}>登录&nbsp;<svg
                             xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                             stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-narrow-right">
