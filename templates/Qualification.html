@@ -44,8 +44,9 @@
                                                  placeholder="手机号"/></div>
                         <div class="mb-3"><input class="shadow form-control" type="password" name="password"
                                                  placeholder="密码"/>
-                        <div class="mb-3" style="margin-top: 20px;"><input class="shadow form-control" type="text"
-                                                                               name="companyname" placeholder="查询公司名称"/></div>
+                            <div class="mb-3" style="margin-top: 20px;"><input class="shadow form-control" type="text"
+                                                                               name="companyname"
+                                                                               placeholder="查询公司名称"/></div>
                         </div>
                         <div class="mb-5">
                             <button class="btn btn-primary shadow" type="submit">查询</button>
@@ -79,7 +80,8 @@
                                                                                     data-bs-toggle="tab" href="#tab-1">主要人员</a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
-                                                                                    data-bs-toggle="tab" href="#tab-2">工程项目</a>
+                                                                                    data-bs-toggle="tab" href="#tab-2">工程项目
+                                        </a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
                                                                                     data-bs-toggle="tab" href="#tab-3">建筑资质</a>
@@ -108,52 +110,26 @@
                                         </div>
                                         <div id="tab-2" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table" id="tb">
                                                     <thead>
                                                     <tr>
-                                                        <th>Column 1</th>
-                                                        <th>Column 2</th>
-                                                        <th>Column 2</th>
-                                                        <th>Column 2</th>
-                                                        <th>Column 2</th>
+                                                        <th>项目编号</th>
+                                                        <th>项目名称</th>
+                                                        <th>项目属地</th>
+                                                        <th>项目类别</th>
+                                                        <th>建设单位</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>Cell 1</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Cell 2</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
+                                                    {% for project in all_project %}
+                                                        <tr>
+                                                            <td>{{ project.project_id }}</td>
+                                                            <td>{{ project.project_name }}</td>
+                                                            <td>{{ project.project_place }}</td>
+                                                            <td>{{ project.project_type }}</td>
+                                                            <td>{{ project.construct_company }}</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

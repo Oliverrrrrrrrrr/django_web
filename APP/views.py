@@ -2,9 +2,9 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-
 from .models import User, Project, Main_person, Tianyancha_User
 from spider.tianyancha_spider import get_data
+
 
 # index
 def index(request):
@@ -33,6 +33,7 @@ def register(request):
         else:
             return HttpResponse("两次密码不一致")
         return redirect('/login/')
+
 
 # login
 def login(request):
@@ -92,7 +93,12 @@ def import_data(request):
 
 def Qualification(request):
     if request.method == 'GET':
-        return render(request, 'Qualification.html')
+        all_main_person = Main_person.objects.all()
+        all_project = Project.objects.all()
+        return render(request, 'Qualification.html', {
+            'all_main_person': all_main_person,
+            'all_project': all_project
+        })
     elif request.method == 'POST':
         phone = request.POST.get('phone')
         password = request.POST.get('password')
@@ -106,7 +112,16 @@ def Qualification(request):
         except Exception as e:
             print(e)
             return HttpResponse("爬取失败")
-        return render(request, 'Qualification.html')
+        # # 如果选择主要人员栏，就显示主要人员
+        # if request.POST.get('main_person'):
+        # all_main_person = Main_person.objects.all()
+        # return render(request, 'Qualification.html', {
+        #     'all_main_person': all_main_person
+        # })
+        # # 如果选择项目栏，就显示项目
+        # if request.POST.get('project'):
+
+
 
 def Repeatability(request):
     return render(request, 'Repeatability.html')
@@ -114,26 +129,6 @@ def Repeatability(request):
 
 def Predict(request):
     return render(request, 'Predict.html')
-
-
-# def tianyancha_spider(request):
-#     phone = request.POST.get('phone')
-#     password = request.POST.get('password')
-#     companyname = request.POST.get('companyname')
-#     tianyancha_user = Tianyancha_User.objects.get(phone=phone)
-#     try:
-#         spider.get_data(phone, password, companyname)
-#     except Exception as e:
-#         print(e)
-#         return HttpResponse("爬取失败")
-#     return render(request, 'Qualification.html')
-
-
-def project_view(request):
-    all_project = Project.objects.all()
-    return render(request, 'Qualification.html', {
-        'all_project': all_project
-    })
 
 
 def main_person(request):
