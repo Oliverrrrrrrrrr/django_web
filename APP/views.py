@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .models import User, Project, Main_person, Tianyancha_User
-from spider.tianyancha_spider import get_data
+from python_function.spider.tianyancha_spider import get_data
 
 from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
 from python_function.Repeatability.seal_detect.read_pic import bianli_pics
