@@ -3,8 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .models import User, Project, Main_person, Tianyancha_User
-from spider.tianyancha_spider import get_data
+from python_function.spider.tianyancha_spider import get_data
 
+from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
+from python_function.Repeatability.seal_detect.read_pic import bianli_pics
+from python_function.Repeatability.seal_detect.signiture_detect import ckeck_seal_exit, pick_seal_image, pick_original_image
 
 # index
 def index(request):
@@ -124,8 +127,14 @@ def Qualification(request):
 
 
 def Repeatability(request):
-    return render(request, 'Repeatability.html')
-
+    # 印章检测函数接口
+    if request.method == 'GET':
+        return render(request, 'Repeatability.html')
+    elif request.method == 'POST':
+        pdfFile = request.POST.get('pdfFile') # 获取上传的文件，
+        storePath = r"Seal Picture" # 设置存储路径
+        pdf2image(pdfFile, storePath, zoom=2.0)#pdf转图片
+        bianli_pics(storePath)#遍历图片并对有印章的图片进行输出页码和提取
 
 def Predict(request):
     return render(request, 'Predict.html')
