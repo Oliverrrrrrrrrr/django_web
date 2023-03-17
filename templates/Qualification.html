@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Raleway:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+
 </head>
 
 <body>
@@ -38,14 +39,13 @@
                 <div style="margin: 0px;margin-top: 0px;margin-bottom: 0px;padding: 107px;padding-top: 0;padding-bottom: 0;">
                     <h2 class="display-6 fw-bold mb-5"><span class="underline pb-1"><strong>天眼查查询</strong></span>
                     </h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3"><input class="shadow form-control" type="number" name="phone"
+                    <form method="post"><span> {% csrf_token %} </span>
+                        <div class="mb-3"><input class="shadow form-control form-control" type="number" name="phone"
                                                  placeholder="手机号"/></div>
-                        <div class="mb-3"><input class="shadow form-control" type="password" name="password"
-                                                 placeholder="密码"/>
-                            <div class="mb-3" style="margin-top: 20px;"><input class="shadow form-control" type="text"
-                                                                               name="companyname"
+                        <div class="mb-3"><input class="shadow form-control form-control" type="password"
+                                                 name="password" placeholder="密码"/>
+                            <div class="mb-3" style="margin-top: 20px;"><input class="shadow form-control form-control"
+                                                                               type="text" name="companyname"
                                                                                placeholder="查询公司名称"/></div>
                         </div>
                         <div class="mb-5">
@@ -57,9 +57,6 @@
             </div>
         </section>
         <section>
-            <div class="container text-center"><input class="border rounded-0 border-4 shadow" type="file"
-                                                      multiple/><input class="btn border-3 shadow btn-light"
-                                                                       type="submit"/></div>
             <div class="container py-5" style="height: 439.188px;">
                 <div>
                     <div>
@@ -76,65 +73,68 @@
                             <div id="tab-4" class="tab-pane active" role="tabpanel">
                                 <div>
                                     <ul class="nav nav-tabs" role="tablist">
-                                        <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
+                                        <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
                                                                                     data-bs-toggle="tab" href="#tab-1">主要人员</a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
-                                                                                    data-bs-toggle="tab" href="#tab-2">工程项目
-                                        </a>
+                                                                                    data-bs-toggle="tab" href="#tab-2">工程项目 </a>
                                         </li>
-                                        <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
+                                        <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
                                                                                     data-bs-toggle="tab" href="#tab-3">建筑资质</a>
                                         </li>
                                     </ul>
-                                    <div class="tab-content">
-                                        <div id="tab-1" class="tab-pane active" role="tabpanel">
+                                    <div class="tab-content" style="overflow-y: scroll;height: 400px">
+                                        <div id="tab-1" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>主要人员</th>
-                                                        <th>职位</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for person in all_main_person %}
+                                                <div>
+                                                    <table class="table">
+                                                        <thead>
                                                         <tr>
-                                                            <td>{{ person.pname }}</td>
-                                                            <td>{{ person.position }}</td>
+                                                            <th>主要人员</th>
+                                                            <th>职位</th>
                                                         </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for person in all_main_person %}
+                                                            <tr>
+                                                                <td>{{ person.pname }}</td>
+                                                                <td>{{ person.position }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                         <div id="tab-2" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
-                                                <table class="table" id="tb">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>项目编号</th>
-                                                        <th>项目名称</th>
-                                                        <th>项目属地</th>
-                                                        <th>项目类别</th>
-                                                        <th>建设单位</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for project in all_project %}
-                                                        <tr >
-                                                            <td>{{ project.project_id }}</td>
-                                                            <td>{{ project.project_name }}</td>
-                                                            <td>{{ project.project_place }}</td>
-                                                            <td>{{ project.project_type }}</td>
-                                                            <td>{{ project.construct_company }}</td>
+                                                <div>
+                                                    <table id="tb" class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>项目编号</th>
+                                                            <th>项目名称</th>
+                                                            <th>项目属地</th>
+                                                            <th>项目类别</th>
+                                                            <th>建设单位</th>
                                                         </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for project in all_project %}
+                                                            <tr>
+                                                                <td>{{ project.project_id }}</td>
+                                                                <td>{{ project.project_name }}</td>
+                                                                <td>{{ project.project_place }}</td>
+                                                                <td>{{ project.project_type }}</td>
+                                                                <td>{{ project.construct_company }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div id="tab-3" class="tab-pane" role="tabpanel">
+                                        <div id="tab-3" class="tab-pane active" role="tabpanel">
                                             <div class="table-responsive">
                                                 <table class="table">
                                                     <thead>

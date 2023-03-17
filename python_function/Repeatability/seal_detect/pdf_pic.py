@@ -34,8 +34,8 @@ def pdf2image(pdfFile, storePath, zoom=2.0):
 
 if __name__ == '__main__':
     # 1、PDF地址
-    # pdfFile = r"上海市地质调查研究院技术部分.pdf"
-    pdfFile = r"上海联源建设工程有限责任公司技术部分.pdf"
+    # staticc/file/project_file
+    pdfFile = r"static/file/project_file/上海联源建设工程有限责任公司技术部分.pdf"
     # 2、需要储存图片的目录
     storePath = r"pdf_picture"
     pdf2image(pdfFile, storePath, zoom=2.0)

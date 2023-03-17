@@ -2,12 +2,12 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .models import User, Project, Main_person, Tianyancha_User
-from python_function.spider.tianyancha_spider import get_data
+from python_function.Qualification.tianyancha_spider import get_data
+from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile
 
-from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
-from python_function.Repeatability.seal_detect.read_pic import bianli_pics
-from python_function.Repeatability.seal_detect.signiture_detect import ckeck_seal_exit, pick_seal_image, pick_original_image
+# from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
+# from python_function.Repeatability.seal_detect.read_pic import bianli_pics
+# from python_function.Repeatability.seal_detect.signiture_detect import ckeck_seal_exit, pick_seal_image, pick_original_image
 
 # index
 def index(request):
@@ -90,8 +90,19 @@ def change_password(request):
             return HttpResponse("原密码错误")
 
 
+# upload file
 def import_data(request):
-    return render(request, 'import.html')
+    if request.method == 'GET':
+        return render(request, 'import.html')
+    elif request.method == 'POST':
+        project_name = request.POST.get('project name')
+        project_file = request.FILES.get('project file')
+        if project_file:
+            f = UploadProjectFile(project_name=project_name, title=project_file.name, path=project_file)
+            f.save()
+            return render(request, 'import.html', {'msg': '上传成功'})
+        else:
+            return HttpResponse("上传失败")
 
 
 def Qualification(request):
@@ -125,23 +136,16 @@ def Qualification(request):
         # if request.POST.get('project'):
 
 
-
 def Repeatability(request):
     # 印章检测函数接口
     if request.method == 'GET':
         return render(request, 'Repeatability.html')
-    elif request.method == 'POST':
-        pdfFile = request.POST.get('pdfFile') # 获取上传的文件，
-        storePath = r"Seal Picture" # 设置存储路径
-        pdf2image(pdfFile, storePath, zoom=2.0)#pdf转图片
-        bianli_pics(storePath)#遍历图片并对有印章的图片进行输出页码和提取
+    # elif request.method == 'POST':
+    #     pdfFile = request.POST.get('pdfFile') # 获取上传的文件，
+    #     storePath = r"Seal Picture" # 设置存储路径
+    #     pdf2image(pdfFile, storePath, zoom=2.0)#pdf转图片
+    #     bianli_pics(storePath)#遍历图片并对有印章的图片进行输出页码和提取
+
 
 def Predict(request):
     return render(request, 'Predict.html')
-
-
-def main_person(request):
-    all_main_person = Main_person.objects.all()
-    return render(request, 'Qualification.html', {
-        'all_main_person': all_main_person
-    })
