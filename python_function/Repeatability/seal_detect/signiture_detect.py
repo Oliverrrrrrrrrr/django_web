@@ -6,7 +6,7 @@ import numpy as np
 
 
 ##判别图片中是否存在红色印章
-def ckeck_seal_exit(image):
+def check_seal_exist(image):
     img = cv2.imread(image)
     img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
@@ -20,9 +20,9 @@ def ckeck_seal_exit(image):
     r_num = 0
     g_num = 0
     for i in g:
-        for j in i :
+        for j in i:
             if j > 160:
-                g_num+=1
+                g_num += 1
     if g_num > 30:
         seal_result = 2
         return seal_result
@@ -34,10 +34,10 @@ def ckeck_seal_exit(image):
 
     if r_num > 30:
         # print("该图片有红章")
-        seal_result = 1#"有印章"  ##该图片有红章
+        seal_result = 1  # "有印章"  ##该图片有红章
     else:
         # print("该图片没有红章")
-        seal_result = 0#"无印章"  ##该图片没有红章
+        seal_result = 0  # "无印章"  ##该图片没有红章
     return seal_result
 
 
@@ -63,9 +63,10 @@ def pick_original_image(image, image_out):
     image = cv2.imread(image)
     cv2.imwrite(image_out, image)
 
+
 if __name__ == '__main__':
     image = 'pdf_picture/26.png'
-    seal_result = ckeck_seal_exit(image)
+    seal_result = check_seal_exist(image)
     print(seal_result)
     image_out = 'signiture.png'
     pick_seal_image(image, image_out)

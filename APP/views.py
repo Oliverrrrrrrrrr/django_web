@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from python_function.Qualification.tianyancha_spider import get_data
-from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile
+from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile
 
-# from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
-# from python_function.Repeatability.seal_detect.read_pic import bianli_pics
-# from python_function.Repeatability.seal_detect.signiture_detect import ckeck_seal_exit, pick_seal_image, pick_original_image
+from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
+from python_function.Repeatability.seal_detect.read_pic import bianli_pics
+from python_function.Repeatability.seal_detect.signiture_detect import check_seal_exist, pick_seal_image, \
+    pick_original_image
+
 
 # index
 def index(request):
@@ -95,14 +97,30 @@ def import_data(request):
     if request.method == 'GET':
         return render(request, 'import.html')
     elif request.method == 'POST':
-        project_name = request.POST.get('project name')
-        project_file = request.FILES.get('project file')
-        if project_file:
-            f = UploadProjectFile(project_name=project_name, title=project_file.name, path=project_file)
-            f.save()
-            return render(request, 'import.html', {'msg': '上传成功'})
+        type = request.POST.get('type')
+        if type in ['招标文件', '投标文件']:
+            project_name = request.POST.get('project name')
+            project_file = request.FILES.get('project file')
+            if project_file:
+                # 查询是否已上传过该文件
+                if UploadProjectFile.objects.filter(title=project_file.name):
+                    return HttpResponse("该文件已上传")
+                # 保存项目信息
+                f = UploadProjectFile(type=type, project_name=project_name, title=project_file.name, path=project_file)
+                f.save()
+                return render(request, 'import.html', {'msg': '上传成功'})
+            else:
+                return HttpResponse("上传失败")
         else:
-            return HttpResponse("上传失败")
+            test_file = request.FILES.get('test file')
+            if test_file:
+                if UploadTestFile.objects.filter(title=test_file.name):
+                    return HttpResponse("该文件已上传")
+                f = UploadTestFile(type=type, title=test_file.name, path=test_file)
+                f.save()
+                return render(request, 'import.html', {'msg': '上传成功'})
+            else:
+                return HttpResponse("上传失败")
 
 
 def Qualification(request):
@@ -126,25 +144,20 @@ def Qualification(request):
         except Exception as e:
             print(e)
             return HttpResponse("爬取失败")
-        # # 如果选择主要人员栏，就显示主要人员
-        # if request.POST.get('main_person'):
-        # all_main_person = Main_person.objects.all()
-        # return render(request, 'Qualification.html', {
-        #     'all_main_person': all_main_person
-        # })
-        # # 如果选择项目栏，就显示项目
-        # if request.POST.get('project'):
 
 
 def Repeatability(request):
     # 印章检测函数接口
     if request.method == 'GET':
         return render(request, 'Repeatability.html')
-    # elif request.method == 'POST':
-    #     pdfFile = request.POST.get('pdfFile') # 获取上传的文件，
-    #     storePath = r"Seal Picture" # 设置存储路径
-    #     pdf2image(pdfFile, storePath, zoom=2.0)#pdf转图片
-    #     bianli_pics(storePath)#遍历图片并对有印章的图片进行输出页码和提取
+    elif request.method == 'POST':
+        filename = request.POST.get('project name')
+        # 调取数据库里的pdf
+        file = UploadProjectFile.objects.get(title=filename)
+        pdfFile = file.path.path  # 设置pdf路径
+        storePath = r"Seal Picture"  # 设置存储路径
+        pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
+        bianli_pics(storePath)  # 遍历图片并对有印章的图片进行输出页码和提取
 
 
 def Predict(request):

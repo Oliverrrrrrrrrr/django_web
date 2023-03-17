@@ -18,6 +18,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from APP.views import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='home'),
@@ -29,5 +30,4 @@ urlpatterns = [
     path('Qualification/', Qualification, name='Qualification'),
     path('Repeatability/', Repeatability, name='Repeatability'),
     path('Predict/', Predict, name='Predict'),
-
 ]
