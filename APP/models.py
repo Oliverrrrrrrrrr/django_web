@@ -55,3 +55,16 @@ class Project(models.Model):
 
     def __str__(self):
         return self.project_name
+
+class UploadProjectFile(models.Model):
+    project_name = models.CharField(max_length=100, verbose_name='项目名称')
+    title = models.CharField(max_length=100, verbose_name='文件名')
+    path = models.FileField(upload_to='file/project_file', verbose_name='文件路径')
+
+    class Meta:
+        db_table = u'upload_project_file'
+        verbose_name = u'上传文件'
+        verbose_name_plural = u'上传文件'
+
+    def __str__(self):
+        return self.title
