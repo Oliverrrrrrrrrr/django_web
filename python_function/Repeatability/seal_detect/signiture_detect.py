@@ -38,7 +38,7 @@ def pdf2image(pdfFile, storePath, zoom=2.0):
 
 
 def bianli_pics(pdfFile, path):
-    project_name = pdfFile.split('/')[-1].split('.')[0]  # 项目名称
+    file_name = pdfFile.split('/')[-1].split('.')[0]  # 项目名称
     seal_pages = []
     img_folder = path
     img_list = [os.path.join(nm) for nm in os.listdir(img_folder) if nm[-3:] in ['jpg', 'png', 'gif']]
@@ -65,12 +65,12 @@ def bianli_pics(pdfFile, path):
             print("第", i, "页存在印章")
             seal_pages.append(i)
 
-    seal = Seal()
-    while os.listdir("static/img/Seal Picture"):
+    for i in os.listdir("Media/Seal Picture/"):
+        seal = Seal()
+        seal.file_title = file_name  ## 项目名称
         seal.seal_page = seal_pages  ## 印章页码
-
-    seal.file_title = project_name  ## 项目名称
-    seal.save()
+        seal.path = i  ## 印章图片路径
+        seal.save()
 
 
 ##判别图片中是否存在红色印章
@@ -130,11 +130,3 @@ def pick_seal_image(image, image_out):
 def pick_original_image(image, image_out):
     image = cv2.imread(image)
     cv2.imwrite(image_out, image)
-
-
-if __name__ == '__main__':
-    image = 'pdf_picture/26.png'
-    seal_result = check_seal_exist(image)
-    print(seal_result)
-    image_out = 'signiture.png'
-    pick_seal_image(image, image_out)
