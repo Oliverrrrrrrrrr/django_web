@@ -121,8 +121,7 @@ class Wenshuwang_User(models.Model):
 # 文书网爬虫结果的数据表
 class Wenshuwang(models.Model):
     company_name = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
-    screen_shot = models.ImageField(upload_to='Media/wenshuwang_pic', verbose_name="行贿" + company_name, null=True,
-                                    blank=True)
+    screen_shot = models.ImageField(upload_to='Media/wenshuwang_pic', verbose_name='截图', null=True, blank=True)
 
     class Meta:
         db_table = u'wenshuwang_info'
