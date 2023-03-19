@@ -65,7 +65,7 @@ class UploadProjectFile(models.Model):
     type = models.CharField(max_length=100, verbose_name='文件类型')
     project_name = models.CharField(max_length=100, verbose_name='项目名称')
     title = models.CharField(max_length=100, verbose_name='文件名')
-    path = models.FileField(upload_to='file/project_file', verbose_name='文件路径')
+    path = models.FileField(upload_to='Media/file/project_file', verbose_name='文件路径')
 
     class Meta:
         db_table = u'upload_project_file'
@@ -79,7 +79,7 @@ class UploadProjectFile(models.Model):
 class UploadTestFile(models.Model):
     type = models.CharField(max_length=100, verbose_name='文件类型')
     title = models.CharField(max_length=100, verbose_name='文件名')
-    path = models.FileField(upload_to='file/test_file', verbose_name='文件路径')
+    path = models.FileField(upload_to='Media/file/test_file', verbose_name='文件路径')
 
     class Meta:
         db_table = u'upload_test_file'
@@ -93,7 +93,7 @@ class UploadTestFile(models.Model):
 class Seal(models.Model):
     file_title = models.CharField(max_length=100, verbose_name='文件名')
     seal_page = models.CharField(max_length=100, verbose_name='印章位置')
-    path = models.FileField(upload_to='static/img/Seal Picture', verbose_name='印章路径')
+    path = models.FileField(upload_to='Media/Seal Picture', verbose_name='印章路径')
 
     class Meta:
         db_table = u'seal'
