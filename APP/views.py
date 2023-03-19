@@ -3,12 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from python_function.Qualification.tianyancha_spider import get_data
+from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile
-
-from python_function.Repeatability.seal_detect.pdf_pic import pdf2image
-from python_function.Repeatability.seal_detect.read_pic import bianli_pics
-from python_function.Repeatability.seal_detect.signiture_detect import check_seal_exist, pick_seal_image, \
-    pick_original_image
 
 
 # index
@@ -157,7 +153,8 @@ def Repeatability(request):
         pdfFile = file.path.path  # 设置pdf路径
         storePath = r"Seal Picture"  # 设置存储路径
         pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
-        bianli_pics(storePath)  # 遍历图片并对有印章的图片进行输出页码和提取
+        bianli_pics(pdfFile, storePath)  # 遍历图片并对有印章的图片进行输出页码和提取
+        return render(request, 'Repeatability.html', {'msg': '检测成功'})
 
 
 def Predict(request):
