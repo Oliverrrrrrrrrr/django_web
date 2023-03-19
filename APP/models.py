@@ -102,3 +102,49 @@ class Seal(models.Model):
 
     def __str__(self):
         return self.file_title
+
+
+# 文书网用户
+class Wenshuwang_User(models.Model):
+    phoneW = models.CharField(max_length=80, verbose_name='手机号', null=False, blank=False, unique=True)
+    password = models.CharField(max_length=80, verbose_name='密码', null=False, blank=False)
+
+    class Meta:
+        db_table = u'wenshuwang_user_info'
+        verbose_name = u'文书网用户'
+        verbose_name_plural = u'文书网用户'
+
+    def __str__(self):
+        return self.phoneW
+
+
+# 文书网爬虫结果的数据表
+class Wenshuwang(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
+    screen_shot = models.ImageField(upload_to='Media/wenshuwang_pic', verbose_name="行贿" + company_name, null=True,
+                                    blank=True)
+
+    class Meta:
+        db_table = u'wenshuwang_info'
+        verbose_name = u'文书网'
+        verbose_name_plural = u'文书网'
+
+    def __str__(self):
+        return self.company_name
+
+
+# 采购网
+class CGW_inquire(models.Model):
+    companyName = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
+    penalty = models.CharField(max_length=200, verbose_name='处罚结果', null=False, blank=False)
+
+    class Meta:
+        db_table = u'cgw_inquire'
+        verbose_name = u'采购网'
+        verbose_name_plural = u'采购网'
+
+    def __unicode__(self):
+        return self.companyName
+
+    def __str__(self):
+        return self.companyName
