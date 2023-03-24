@@ -80,7 +80,7 @@
                                                                                     data-bs-toggle="tab" href="#tab-2">工程项目 </a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
-                                                                                    data-bs-toggle="tab" href="#tab-3">建筑资质</a>
+                                                                                    data-bs-toggle="tab" href="#tab-3">股东信息</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" style="overflow-y: scroll;height: 400px">
@@ -139,31 +139,23 @@
                                                 <table class="table">
                                                     <thead>
                                                     <tr>
-                                                        <th>Column 1</th>
-                                                        <th>Column 2</th>
+                                                        <th>股东（发起人）</th>
+                                                        <th>持股比例</th>
+                                                        <th>最终受益股份</th>
+                                                        <th>认缴出资额</th>
+                                                        <th>认缴出资日期</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>Cell 1</td>
-                                                        <td>Cell 2</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cell 3</td>
-                                                        <td>Cell 4</td>
-                                                    </tr>
+                                                    {% for shareholder in all_shareholder %}
+                                                        <tr>
+                                                            <td>{{ shareholder.shareholder_name }}</td>
+                                                            <td>{{ shareholder.shareholding_ratio }}</td>
+                                                            <td>{{ shareholder.ultimate_beneficial_shares }}</td>
+                                                            <td>{{ shareholder.contribution_amount }}</td>
+                                                            <td>{{ shareholder.contribution_time }}</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

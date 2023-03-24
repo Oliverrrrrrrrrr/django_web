@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 
 from python_function.Qualification.tianyancha_spider import get_data
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
-from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile
+from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
+    Shareholder_information
 
 
 # index
@@ -121,12 +122,7 @@ def import_data(request):
 
 def Qualification(request):
     if request.method == 'GET':
-        all_main_person = Main_person.objects.all()
-        all_project = Project.objects.all()
-        return render(request, 'Qualification.html', {
-            'all_main_person': all_main_person,
-            'all_project': all_project
-        })
+        return render(request, 'Qualification.html')
     elif request.method == 'POST':
         phone = request.POST.get('phone')
         password = request.POST.get('password')
@@ -135,11 +131,22 @@ def Qualification(request):
             tianyancha_user = Tianyancha_User.objects.get(phone=phone)
         else:
             tianyancha_user = Tianyancha_User.objects.create(phone=phone, password=password)
-        try:
-            get_data(phone, password, companyname)
-        except Exception as e:
-            print(e)
-            return HttpResponse("爬取失败")
+        # 若数据库中无该公司数据则爬取
+        if not Main_person.objects.filter(company_name=companyname):
+            try:
+                get_data(phone, password, companyname)
+            except Exception as e:
+                print(e)
+                return HttpResponse("爬取失败")
+        # 找到数据库中对应企业的数据
+        all_main_person = Main_person.objects.filter(company_name=companyname)
+        all_project = Project.objects.filter(company_name=companyname)
+        all_shareholder = Shareholder_information.objects.filter(company_name=companyname)
+        return render(request, 'Qualification.html', {
+            'all_main_person': all_main_person,
+            'all_project': all_project,
+            'all_shareholder': all_shareholder
+        })
 
 
 def Repeatability(request):

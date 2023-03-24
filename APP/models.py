@@ -33,6 +33,7 @@ class Tianyancha_User(models.Model):
 
 
 class Main_person(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False)
     pname = models.CharField(max_length=80, verbose_name='姓名', null=False, blank=False)
     position = models.CharField(max_length=80, verbose_name='职位', null=False, blank=False)
 
@@ -45,7 +46,27 @@ class Main_person(models.Model):
         return self.pname
 
 
+class Shareholder_information(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
+                                    default='default_value')
+    shareholder_name = models.CharField(max_length=80, verbose_name='股东（发起人）', null=False, blank=False)
+    shareholding_ratio = models.CharField(max_length=80, verbose_name='持股比例', null=False, blank=False)
+    ultimate_beneficial_shares = models.CharField(max_length=80, verbose_name='最终受益股份', null=False, blank=False)
+    contribution_amount = models.CharField(max_length=80, verbose_name='认缴出资额', null=False, blank=False)
+    contribution_time = models.CharField(max_length=80, verbose_name='认缴出资日期', null=False, blank=False)
+
+    class Meta:
+        db_table = u'shareholder_information'
+        verbose_name = u'股东信息'
+        verbose_name_plural = u'股东信息'
+
+    def __str__(self):
+        return self.shareholder_name
+
+
 class Project(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
+                                    default='default_value')
     project_id = models.CharField(max_length=80, verbose_name='项目编号', null=False, blank=False)
     project_name = models.CharField(max_length=80, verbose_name='项目名称', null=False, blank=False)
     project_place = models.CharField(max_length=80, verbose_name='项目属地', null=False, blank=False)
