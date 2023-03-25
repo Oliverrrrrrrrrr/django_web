@@ -72,6 +72,45 @@ def check_pagination(div):
         return False
 
 
+# 主要人员
+def Main_personnel(driver, div, companyname):
+    main_person = div.text
+    main_person = re.sub(r'\n最终受益人', '', main_person)
+    pattern = r'\d+\s*\S+\s*(\S+)\s*.*?\s*(\S+)\s*-\s*-'
+    main_person_match = re.findall(pattern, main_person)
+    columns = ['主要人员', '职位']
+    df = pd.DataFrame(main_person_match, columns=columns)
+    # 保存到数据库
+    for i in range(len(df)):
+        person = Main_person()
+        person.pname = df['主要人员'][i]
+        person.position = df['职位'][i]
+        person.company_name = companyname
+        if not Main_person.objects.filter(company_name=companyname):
+            person.save()
+
+
+# 股东信息
+def Stocker_information(driver, div, companyname):
+    stocker = div.text
+    pattern = r'(?P<name>\S+)\s*.*?\s*.*?\s*(?P<percent1>\d+.\d+%)\s*(?P<percent2>\d+.\d+%)\s*[\S\s]*?(?P<num>\d+\.\d+万元)\s*(?P<data>\d{4}-\d{2}-\d{2})'
+    matches = re.findall(pattern, stocker)
+    columns = ['股东（发起人）', '持股比例', '最终受益股份', '认缴出资额', '认缴出资日期']
+    df = pd.DataFrame(matches, columns=columns)
+    # 保存到数据库
+    for i in range(len(df)):
+        stock = Shareholder_information()
+        stock.shareholder_name = df['股东（发起人）'][i]
+        stock.shareholding_ratio = df['持股比例'][i]
+        stock.ultimate_beneficial_shares = df['最终受益股份'][i]
+        stock.contribution_amount = df['认缴出资额'][i]
+        stock.contribution_time = df['认缴出资日期'][i]
+        stock.company_name = companyname
+        # 若数据库已有则不保存
+        if not Shareholder_information.objects.filter(company_name=companyname):
+            stock.save()
+
+
 # 资质资格
 def Building_qualifications(driver, div, companyname):
     text = div.text
@@ -143,41 +182,6 @@ def Engineering_project(driver, div, companyname):
         project.save()
 
 
-# 主要人员
-def Main_personnel(driver, div, companyname):
-    main_person = div.text
-    main_person = re.sub(r'\n最终受益人', '', main_person)
-    pattern = r'\d+\s*\S+\s*(\S+)\s*.*?\s*(\S+)\s*-\s*-'
-    main_person_match = re.findall(pattern, main_person)
-    columns = ['主要人员', '职位']
-    df = pd.DataFrame(main_person_match, columns=columns)
-    # 保存到数据库
-    for i in range(len(df)):
-        person = Main_person()
-        person.pname = df['主要人员'][i]
-        person.position = df['职位'][i]
-        person.company_name = companyname
-        person.save()
-
-
-def Stocker_information(driver, div, companyname):
-    stocker = div.text
-    pattern = r'(?P<name>\S+)\s*.*?\s*.*?\s*(?P<percent1>\d+.\d+%)\s*(?P<percent2>\d+.\d+%)\s*[\S\s]*?(?P<num>\d+\.\d+万元)\s*(?P<data>\d{4}-\d{2}-\d{2})'
-    matches = re.findall(pattern, stocker)
-    columns = ['股东（发起人）', '持股比例', '最终受益股份', '认缴出资额', '认缴出资日期']
-    df = pd.DataFrame(matches, columns=columns)
-    # 保存到数据库
-    for i in range(len(df)):
-        stock = Shareholder_information()
-        stock.shareholder_name = df['股东（发起人）'][i]
-        stock.shareholding_ratio = df['持股比例'][i]
-        stock.ultimate_beneficial_shares = df['最终受益股份'][i]
-        stock.contribution_amount = df['认缴出资额'][i]
-        stock.contribution_time = df['认缴出资日期'][i]
-        stock.company_name = companyname
-        stock.save()
-
-
 def spider(driver, companyname):
     # 透视图下载
     # wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="page-root"]/div[3]/div[1]/div[3]/div/div[2]/div[2]/div/div[4]/div/div[2]/div/div/div[1]/div[2]/div[3]/span')))
@@ -222,5 +226,5 @@ def spider(driver, companyname):
 
 
 # 封装函数
-def get_data(phone, password, companyname):
+def tianyancha_spider(phone, password, companyname):
     login(phone, password, companyname)

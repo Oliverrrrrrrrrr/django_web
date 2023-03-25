@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('APP', '0009_alter_uploadtestfile_path'),
     ]
@@ -16,7 +15,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('file_title', models.CharField(max_length=100, verbose_name='文件名')),
                 ('seal_page', models.CharField(max_length=100, verbose_name='印章位置')),
-                ('path', models.FileField(upload_to='static/img/Seal Picture', verbose_name='印章路径')),
+                ('path', models.FileField(upload_to='static/img/Seal_Picture', verbose_name='印章路径')),
             ],
             options={
                 'verbose_name': '印章',

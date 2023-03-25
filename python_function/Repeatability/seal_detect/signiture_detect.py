@@ -47,7 +47,7 @@ def bianli_pics(pdfFile, path):
         i = img_list[n]
 
         image = path + i  # "pdf_picture/"+i
-        # image_out = "Seal Picture/" + i + "_signiture.png"
+        # image_out = "Seal_Picture/" + i + "_signiture.png"
         flag = 1 - check_seal_exist(image)
         if flag:  # 到数据库中删除原图像
             # delete_original_image(image, image_out)
@@ -65,7 +65,7 @@ def bianli_pics(pdfFile, path):
             print("第", i, "页存在印章")
             seal_pages.append(i)
 
-    for i in os.listdir("Media/Seal Picture/"):
+    for i in os.listdir("Media/Seal_Picture/"):
         seal = Seal()
         seal.file_title = file_name  ## 项目名称
         seal.seal_page = seal_pages  ## 印章页码

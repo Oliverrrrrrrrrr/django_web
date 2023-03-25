@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from python_function.Qualification.tianyancha_spider import get_data
+from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
     Shareholder_information
@@ -134,7 +134,7 @@ def Qualification(request):
         # 若数据库中无该公司数据则爬取
         if not Main_person.objects.filter(company_name=companyname):
             try:
-                get_data(phone, password, companyname)
+                tianyancha_spider(phone, password, companyname)
             except Exception as e:
                 print(e)
                 return HttpResponse("爬取失败")
@@ -161,7 +161,7 @@ def Repeatability(request):
         except:
             return HttpResponse("文件不存在")
         pdfFile = file.path.path  # 设置pdf路径
-        storePath = r"Media/Seal Picture"  # 设置存储路径
+        storePath = r"Media/Seal_Picture"  # 设置存储路径
         try:
             pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
             bianli_pics(pdfFile, storePath)  # 遍历图片并对有印章的图片进行输出页码和提取

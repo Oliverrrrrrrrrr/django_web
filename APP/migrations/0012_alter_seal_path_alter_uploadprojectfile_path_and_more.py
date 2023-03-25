@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('APP', '0011_cgw_inquire_wenshuwang_wenshuwang_user_and_more'),
     ]
@@ -13,7 +12,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='seal',
             name='path',
-            field=models.FileField(upload_to='Seal Picture', verbose_name='印章路径'),
+            field=models.FileField(upload_to='Seal_Picture', verbose_name='印章路径'),
         ),
         migrations.AlterField(
             model_name='uploadprojectfile',

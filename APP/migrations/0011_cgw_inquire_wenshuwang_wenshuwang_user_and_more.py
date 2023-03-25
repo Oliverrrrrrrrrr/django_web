@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('APP', '0010_seal'),
     ]
@@ -28,7 +27,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('company_name', models.CharField(max_length=80, unique=True, verbose_name='公司名称')),
-                ('screen_shot', models.ImageField(blank=True, null=True, upload_to='Media/wenshuwang_pic', verbose_name='截图')),
+                ('screen_shot',
+                 models.ImageField(blank=True, null=True, upload_to='Media/wenshuwang_pic', verbose_name='截图')),
             ],
             options={
                 'verbose_name': '文书网',
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='seal',
             name='path',
-            field=models.FileField(upload_to='Media/Seal Picture', verbose_name='印章路径'),
+            field=models.FileField(upload_to='Media/Seal_Picture', verbose_name='印章路径'),
         ),
         migrations.AlterField(
             model_name='uploadprojectfile',
