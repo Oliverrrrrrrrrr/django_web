@@ -92,8 +92,8 @@ class UploadTestFile(models.Model):
 
 class Seal(models.Model):
     file_title = models.CharField(max_length=100, verbose_name='文件名')
-    seal_page = models.CharField(max_length=100, verbose_name='印章位置')
-    path = models.FileField(upload_to='Seal Picture', verbose_name='印章路径')
+    seal_page = models.CharField(max_length=500, verbose_name='印章位置')
+    path = models.FileField(upload_to='Seal_Picture', verbose_name='印章路径')
 
     class Meta:
         db_table = u'seal'

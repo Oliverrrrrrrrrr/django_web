@@ -151,10 +151,14 @@ def Repeatability(request):
         # 调取数据库里的pdf
         try:
             file = UploadProjectFile.objects.get(title=filename + ".pdf")
+            ##########弹出弹窗提示文件调取成功，开始检测印章##########
+
+            #########试着搞个进度条#########
+
         except:
             return HttpResponse("文件不存在")
         pdfFile = file.path.path  # 设置pdf路径
-        storePath = r"Media/Seal Picture"  # 设置存储路径
+        storePath = r"static/img/Seal_Picture/"  # 设置存储路径
         try:
             pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
             bianli_pics(pdfFile, storePath)  # 遍历图片并对有印章的图片进行输出页码和提取
@@ -162,6 +166,9 @@ def Repeatability(request):
         except Exception as e:
             print(e)
             return HttpResponse("检测失败")
+        #检测成功之后需要对检测结果进行保存并展示
+        #完成这一检测之后，将static/img/Seal_Picture/下的文件全部删除
+        
 
 
 def Predict(request):

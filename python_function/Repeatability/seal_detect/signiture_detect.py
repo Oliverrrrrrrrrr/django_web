@@ -7,7 +7,6 @@ import fitz
 import os
 from APP.models import Seal
 
-
 def pdf2image(pdfFile, storePath, zoom=2.0):
     doc = fitz.open(pdfFile)
     picName = os.path.splitext(os.path.basename(pdfFile))[0]
@@ -46,11 +45,10 @@ def bianli_pics(pdfFile, path):
     for n in range(len(img_list)):
         i = img_list[n]
 
-        image = path + i  # "pdf_picture/"+i
-        # image_out = "Seal Picture/" + i + "_signiture.png"
+        image = path + i 
+        # image_out = "Seal_Picture/" + i + "_signiture.png"
         flag = 1 - check_seal_exist(image)
-        if flag:  # 到数据库中删除原图像
-            # delete_original_image(image, image_out)
+        if flag:  # 到文件夹下删除原图像
             # print("第",i,"页",flag)
             file_name = image
             if os.path.exists(file_name):
@@ -59,17 +57,15 @@ def bianli_pics(pdfFile, path):
             else:
                 print('未找到此文件:', file_name)
         else:
-            # print("第",i,"页",flag)
-            # 删除i中的".png"字符串
             i = i.replace(".png", "")
             print("第", i, "页存在印章")
             seal_pages.append(i)
 
-    for i in os.listdir("Media/Seal Picture/"):
+    for i in os.listdir("static/img/Seal_Picture/"):
         seal = Seal()
         seal.file_title = file_name  ## 项目名称
         seal.seal_page = seal_pages  ## 印章页码
-        seal.path = i  ## 印章图片路径
+        seal.path = "static/img/Seal_Picture/" + i  ## 印章图片路径
         seal.save()
 
 
@@ -93,7 +89,6 @@ def check_seal_exist(image):
                 g_num += 1
     if g_num > 30:
         seal_result = 2
-        return seal_result
 
     for i in b:
         for j in i:
@@ -109,7 +104,7 @@ def check_seal_exist(image):
     return seal_result
 
 
-##红章的提取出来生成图片（只能提取出黑白颜色底的红色印章）
+##红章的提取出来生成图片
 def pick_seal_image(image, image_out):
     np.set_printoptions(threshold=np.inf)
     image = cv2.imread(image)
@@ -130,3 +125,14 @@ def pick_seal_image(image, image_out):
 def pick_original_image(image, image_out):
     image = cv2.imread(image)
     cv2.imwrite(image_out, image)
+
+
+# def main():
+#     pdfFile = "Media/file/test_file/上海联源建设工程有限责任公司技术部分.pdf"
+#     path = "Media/Seal_Picture/"
+#     images = pdf2image(pdfFile, path)
+#     bianli_pics(pdfFile, path)
+
+# #调用主函数
+# if __name__ == '__main__':
+#     main()
