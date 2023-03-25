@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information
+    Shareholder_information, Seal
 
 
 # index
@@ -155,20 +155,28 @@ def Repeatability(request):
         return render(request, 'Repeatability.html')
     elif request.method == 'POST':
         filename = request.POST.get('project name')
-        # 调取数据库里的pdf
-        try:
-            file = UploadProjectFile.objects.get(title=filename + ".pdf")
-        except:
-            return HttpResponse("文件不存在")
-        pdfFile = file.path.path  # 设置pdf路径
-        storePath = r"Media/Seal_Picture" + "/" + filename  # 设置存储路径
-        try:
-            pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
-            bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
-            return render(request, 'Repeatability.html', {'msg': '检测成功'})
-        except Exception as e:
-            print(e)
-            return HttpResponse("检测失败")
+        # 查看数据库中是否已有检测结果
+        if not Seal.objects.filter(file_title=filename):
+            # 调取数据库里的pdf
+            try:
+                file = UploadProjectFile.objects.get(title=filename + ".pdf")
+            except:
+                return HttpResponse("文件不存在")
+            # 未检测过则进行检测
+            pdfFile = file.path.path  # 设置pdf路径
+            storePath = r"Media/Seal_Picture" + "/" + filename  # 设置存储路径
+            try:
+                pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
+                bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
+            except Exception as e:
+                print(e)
+                return HttpResponse("检测失败")
+        all_seal = Seal.objects.filter(file_title=filename)
+        # 将所有页码拼接成字符串
+        pages = ""
+        for seal in all_seal:
+            pages += seal.seal_page + ","
+        return render(request, 'Repeatability.html', {'all_seal': all_seal, 'pages': pages})
 
 
 def Predict(request):
