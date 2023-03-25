@@ -64,7 +64,7 @@ def bianli_pics(pdfFile, path, file_name):
 
 ##判别图片中是否存在红色印章
 def check_seal_exist(image):
-    img = cv2.imread(image)
+    img = cv2.imdecode(np.fromfile(image, dtype=np.uint8), cv2.IMREAD_COLOR)
     img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 
     lower_blue = np.array([100, 30, 100])
