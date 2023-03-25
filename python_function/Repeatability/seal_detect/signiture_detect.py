@@ -93,8 +93,6 @@ def check_seal_exist(image):
                 g_num += 1
     if g_num > 30:
         seal_result = 2
-        return seal_result
-
     for i in b:
         for j in i:
             if j > 170:
