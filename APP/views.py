@@ -164,7 +164,7 @@ def Repeatability(request):
         storePath = r"Media/Seal_Picture" + "/" + filename  # 设置存储路径
         try:
             pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
-            bianli_pics(pdfFile, storePath)  # 遍历图片并对有印章的图片进行输出页码和提取
+            bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
             return render(request, 'Repeatability.html', {'msg': '检测成功'})
         except Exception as e:
             print(e)

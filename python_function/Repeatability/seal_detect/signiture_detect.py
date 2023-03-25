@@ -37,40 +37,29 @@ def pdf2image(pdfFile, storePath, zoom=2.0):
     return images
 
 
-def bianli_pics(pdfFile, path):
-    file_name = pdfFile.split('/')[-1].split('.')[0]  # 项目名称
+def bianli_pics(pdfFile, path, file_name):
     seal_pages = []
     img_folder = path
     img_list = [os.path.join(nm) for nm in os.listdir(img_folder) if nm[-3:] in ['jpg', 'png', 'gif']]
     # print(img_list) #将所有图像遍历并存入一个列表
-    for n in range(len(img_list)):
-        i = img_list[n]
-
-        image = path + i  # "pdf_picture/"+i
-        # image_out = "Seal_Picture/" + i + "_signiture.png"
-        flag = 1 - check_seal_exist(image)
-        if flag:  # 到数据库中删除原图像
-            # delete_original_image(image, image_out)
-            # print("第",i,"页",flag)
-            file_name = image
-            if os.path.exists(file_name):
-                os.remove(file_name)
-                print('成功删除文件:', file_name)
-            else:
-                print('未找到此文件:', file_name)
+    for img in img_list:
+        img_path = path + "/" + img
+        if not os.path.exists(img_path):
+            print("图片不存在")
+            continue
+        if not check_seal_exist(img_path):  # 判断图片中是否存在印章
+            os.remove(img_path)
+            print('成功删除文件:', img)
         else:
-            # print("第",i,"页",flag)
-            # 删除i中的".png"字符串
-            i = i.replace(".png", "")
+            i = img.replace(".png", "")
             print("第", i, "页存在印章")
             seal_pages.append(i)
-
-    for i in os.listdir("Media/Seal_Picture/"):
-        seal = Seal()
-        seal.file_title = file_name  ## 项目名称
-        seal.seal_page = seal_pages  ## 印章页码
-        seal.path = i  ## 印章图片路径
-        seal.save()
+            # 保存到数据库
+            seal = Seal()
+            seal.file_title = file_name  ## 项目名称
+            seal.seal_page = i  ## 印章页码
+            seal.path = img_path  ## 印章图片路径
+            seal.save()
 
 
 ##判别图片中是否存在红色印章
