@@ -65,7 +65,7 @@ def login(phone, password, companyname):
 
 # 检测分页
 def check_pagination(div):
-    pagination = div.find_element_by_class_name('pagination')
+    pagination = div.find_element(By.CLASS_NAME, 'pagination')
     if pagination:
         return True
     else:
@@ -142,44 +142,52 @@ def Engineering_project(driver, div, companyname):
     project = re.sub(r'\s*\d+(\s+\d+)*$', '', project)
     project = re.sub(r'详情', '', project)
     project_all = project
-    # if check_pagination(project_div):
-    #     page_div = project_div.find_element_by_class_name('pagination')
-    #     total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
-    #     for i in range(2, total_page + 1):
-    #         # 点击第二页
-    #         if i == 2:
-    #             page_div.find_element(By.XPATH, './div[2]').click()
-    #         # 点击第三页及之后页面
-    #         else:
-    #             page_div.find_element(By.XPATH, './div[2]/div[' + str(i + 1) + ']').click()
-    #         # 获取当前页面的工程项目信息
-    #         wait = WebDriverWait(driver, 10)
-    #         wait.until(EC.presence_of_element_located(project_div))
-    #         project = project_div.text
-    #         # 整理数据
-    #         project = re.sub(r'\n', ' ', project)
-    #         project = re.sub(r'工程项目 28 全部项目 序号 项目编号 项目名称 项目属地 项目类别 建设单位 操作 ', '',
-    #                          project)
-    #         project = re.sub(r'\s*\d+(\s+\d+)*$', '', project)
-    #         project = re.sub(r'详情', '', project)
-    #         # 将每页的工程项目信息合并
-    #         project_all = project_all + project
-    # else:
-    #     project_all = project
+    if check_pagination(project_div):
+        page_div = project_div.find_element(By.CLASS_NAME, 'pagination')
+        total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
+        proj = ""
+        for i in range(2, total_page + 1):
+            for page in page_div.find_elements(By.CLASS_NAME, 'num'):
+                if page.text == str(i):
+                    driver.execute_script("window.scrollTo(document.body.scrollHeight,0);")
+                    wait = WebDriverWait(page_div, 10)
+                    page = wait.until(EC.element_to_be_clickable(page))
+                    page.click()
+                    break
+            # 获取当前页面的工程项目信息
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)
+            # 等待页面加载完成
+            wait = WebDriverWait(driver, 10)
+            wait.until(
+                EC.presence_of_element_located((By.ID, '工程项目')))
+            proj = project_div.text
+            # 整理数据
+            proj = re.sub(r'\n', ' ', proj)
+            proj = re.sub(r'工程项目 28 全部项目 序号 项目编号 项目名称 项目属地 项目类别 建设单位 操作 ', '',
+                          proj)
+            proj = re.sub(r'\s*\d+(\s+\d+)*$', '', proj)
+            proj = re.sub(r'详情', '', proj)
+            # 将每页的工程项目信息合并
+            project_all = project_all + proj
+    else:
+        project_all = project
     # 将工程项目信息保存到数据库
     pattern = r'\s*\d+\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)'
     matches = re.findall(pattern, project_all)
     columns = matches[0]
     df = pd.DataFrame(matches[1:], columns=columns)
     for i in range(len(df)):
-        project = Project()
-        project.project_number = df['项目编号'][i]
-        project.project_name = df['项目名称'][i]
-        project.project_location = df['项目属地'][i]
-        project.project_type = df['项目类别'][i]
-        project.construction_unit = df['建设单位'][i]
-        project.company_name = companyname
-        project.save()
+        project_data = Project()
+        project_data.project_id = df['项目编号'][i]
+        project_data.project_name = df['项目名称'][i]
+        project_data.project_place = df['项目属地'][i]
+        project_data.project_type = df['项目类别'][i]
+        project_data.construct_company = df['建设单位'][i]
+        project_data.company_name = companyname
+        # 若数据库已有则不保存
+        if not Project.objects.filter(project_id=project_data.project_id):
+            project_data.save()
 
 
 def spider(driver, companyname):

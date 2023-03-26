@@ -94,26 +94,3 @@ def check_seal_exist(image):
         # print("该图片没有红章")
         seal_result = 0  # "无印章"  ##该图片没有红章
     return seal_result
-
-
-##红章的提取出来生成图片（只能提取出黑白颜色底的红色印章）
-def pick_seal_image(image, image_out):
-    np.set_printoptions(threshold=np.inf)
-    image = cv2.imread(image)
-
-    hue_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    low_range = np.array([150, 103, 100])
-    high_range = np.array([180, 255, 255])
-    th = cv2.inRange(hue_image, low_range, high_range)
-    index1 = th == 255
-
-    img = np.zeros(image.shape, np.uint8)
-    img[:, :] = (255, 255, 255)
-    img[index1] = image[index1]  # (0,0,255)
-
-    cv2.imwrite(image_out, img)
-
-
-def pick_original_image(image, image_out):
-    image = cv2.imread(image)
-    cv2.imwrite(image_out, image)
