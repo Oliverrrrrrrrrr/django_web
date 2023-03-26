@@ -155,7 +155,7 @@ class Wenshuwang(models.Model):
 
 # 采购网
 class CGW_inquire(models.Model):
-    companyName = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
+    company_name = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
     penalty = models.CharField(max_length=200, verbose_name='处罚结果', null=False, blank=False)
 
     class Meta:
@@ -164,7 +164,7 @@ class CGW_inquire(models.Model):
         verbose_name_plural = u'采购网'
 
     def __unicode__(self):
-        return self.companyName
+        return self.company_name
 
     def __str__(self):
-        return self.companyName
+        return self.company_name
