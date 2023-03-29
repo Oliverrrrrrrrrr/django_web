@@ -79,95 +79,264 @@
                                         <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
                                                                                     data-bs-toggle="tab" href="#tab-2">工程项目 </a>
                                         </li>
-                                        <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
+                                        <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
                                                                                     data-bs-toggle="tab" href="#tab-3">股东信息</a>
                                         </li>
+                                        <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
+                                                                                    data-bs-toggle="tab" href="#tab-10">资质资格</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
+                                                                                    data-bs-toggle="tab" href="#tab-7">注册人员</a>
+                                        </li>
                                     </ul>
-                                    <div class="tab-content" style="overflow-y: scroll;height: 400px">
+                                    <div class="tab-content" style="overflow-y: scroll;height: 400px;">
                                         <div id="tab-1" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
                                                 <div>
-                                                    <table class="table">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>主要人员</th>
-                                                            <th>职位</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for person in all_main_person %}
-                                                            <tr>
-                                                                <td>{{ person.pname }}</td>
-                                                                <td>{{ person.position }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
+                                                    <div>
+                                                        <div>
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>主要人员</th>
+                                                                    <th>职位</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {% for person in all_main_person %}
+                                                                    <tr>
+                                                                        <td>{{ person.pname }}</td>
+                                                                        <td>{{ person.position }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="tab-2" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
                                                 <div>
-                                                    <table id="tb" class="table">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>项目编号</th>
-                                                            <th>项目名称</th>
-                                                            <th>项目属地</th>
-                                                            <th>项目类别</th>
-                                                            <th>建设单位</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for project in all_project %}
-                                                            <tr>
-                                                                <td>{{ project.project_id }}</td>
-                                                                <td>{{ project.project_name }}</td>
-                                                                <td>{{ project.project_place }}</td>
-                                                                <td>{{ project.project_type }}</td>
-                                                                <td>{{ project.construct_company }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
+                                                    <div>
+                                                        <div>
+                                                            <table id="tb" class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>项目编号</th>
+                                                                    <th>项目名称</th>
+                                                                    <th>项目属地</th>
+                                                                    <th>项目类别</th>
+                                                                    <th>建设单位</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {% for project in all_project %}
+                                                                    <tr>
+                                                                        <td>{{ project.project_id }}</td>
+                                                                        <td>{{ project.project_name }}</td>
+                                                                        <td>{{ project.project_place }}</td>
+                                                                        <td>{{ project.project_type }}</td>
+                                                                        <td>{{ project.construct_company }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="tab-3" class="tab-pane active" role="tabpanel">
+                                        <div id="tab-3" class="tab-pane" role="tabpanel">
                                             <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>股东（发起人）</th>
-                                                        <th>持股比例</th>
-                                                        <th>最终受益股份</th>
-                                                        <th>认缴出资额</th>
-                                                        <th>认缴出资日期</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for shareholder in all_shareholder %}
-                                                        <tr>
-                                                            <td>{{ shareholder.shareholder_name }}</td>
-                                                            <td>{{ shareholder.shareholding_ratio }}</td>
-                                                            <td>{{ shareholder.ultimate_beneficial_shares }}</td>
-                                                            <td>{{ shareholder.contribution_amount }}</td>
-                                                            <td>{{ shareholder.contribution_time }}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
+                                                <div>
+                                                    <div>
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>股东（发起人）</th>
+                                                                <th>持股比例</th>
+                                                                <th>最终受益股份</th>
+                                                                <th>认缴出资额</th>
+                                                                <th>认缴出资日期</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for shareholder in all_shareholder %}
+                                                                <tr>
+                                                                    <td>{{ shareholder.shareholder_name }}</td>
+                                                                    <td>{{ shareholder.shareholding_ratio }}</td>
+                                                                    <td>{{ shareholder.ultimate_beneficial_shares }}</td>
+                                                                    <td>{{ shareholder.contribution_amount }}</td>
+                                                                    <td>{{ shareholder.contribution_time }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tab-10" class="tab-pane" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <div>
+                                                    <div>
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>发证日期</th>
+                                                                <th>证书有效期</th>
+                                                                <th>资质类别</th>
+                                                                <th>资质证书号</th>
+                                                                <th>资质名称</th>
+                                                                <th>发证机关</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for qualification in all_qualification %}
+                                                                <tr>
+                                                                    <td>{{ qualification.qualification_date }}</td>
+                                                                    <td>{{ qualification.qualification_validity }}</td>
+                                                                    <td>{{ qualification.qualification_type }}</td>
+                                                                    <td>{{ qualification.qualification_number }}</td>
+                                                                    <td>{{ qualification.qualification_name }}</td>
+                                                                    <td>{{ qualification.qualification_authority }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tab-7" class="tab-pane active" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <div>
+                                                    <span> {% for shareholder in all_shareholder %} {% endfor %} </span>
+                                                    <div>
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>姓名</th>
+                                                                <th>注册类别</th>
+                                                                <th>注册号（执业印章号）</th>
+                                                                <th>注册专业</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for register_person in all_register_person %}
+                                                                <tr>
+                                                                    <td>{{ register_person.register_person_name }}</td>
+                                                                    <td>{{ register_person.register_person_type }}</td>
+                                                                    <td>{{ register_person.register_person_number }}</td>
+                                                                    <td>{{ register_person.register_person_profession }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="tab-5" class="tab-pane" role="tabpanel">
-                                <p>Content for tab 5.</p>
+                                <div class="table-responsive">
+                                    <div>
+                                        <div>
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>公司名称</th>
+                                                    <th>处罚结果</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>{{ person.pname }}</td>
+                                                    <td>{{ person.position }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div id="tab-6" class="tab-pane" role="tabpanel">
-                                <p>Content for tab 6.</p>
+                                <div>
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
+                                                                                    data-bs-toggle="tab" href="#tab-8">基础信息</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation"><a class="nav-link" role="tab"
+                                                                                    data-bs-toggle="tab" href="#tab-9">行政信息</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" style="overflow-y: scroll;height: 400px;">
+                                        <div id="tab-8" class="tab-pane active" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <div>
+                                                    <div>
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>法定代表人</th>
+                                                                <th>企业类型</th>
+                                                                <th>成立日期</th>
+                                                                <th>住所</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>{{ person.pname }}</td>
+                                                                <td>{{ person.position }}</td>
+                                                                <td>Cell 3</td>
+                                                                <td>Cell 4</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tab-9" class="tab-pane" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <div>
+                                                    <div>
+                                                        <table id="tb" class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>行政管理</th>
+                                                                <th>诚实守信</th>
+                                                                <th>严重失信主体名单</th>
+                                                                <th>经营异常</th>
+                                                                <th>信用承诺</th>
+                                                                <th>信用评价</th>
+                                                                <th>司法判决</th>
+                                                                <th>其他</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>{{ project.project_id }}</td>
+                                                                <td>{{ project.project_name }}</td>
+                                                                <td>{{ project.project_place }}</td>
+                                                                <td>{{ project.project_type }}</td>
+                                                                <td>{{ project.construct_company }}</td>
+                                                                <td>Cell 6</td>
+                                                                <td>Cell 7</td>
+                                                                <td>Cell 8</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

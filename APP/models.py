@@ -64,6 +64,42 @@ class Shareholder_information(models.Model):
         return self.shareholder_name
 
 
+class Qualification_person(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
+                                    default='default_value')
+    qualification_name = models.CharField(max_length=80, verbose_name='资质名称', null=False, blank=False)
+    qualification_number = models.CharField(max_length=80, verbose_name='资质证书号', null=False, blank=False)
+    qualification_type = models.CharField(max_length=80, verbose_name='资质类别', null=False, blank=False)
+    qualification_date = models.CharField(max_length=80, verbose_name='发证日期', null=False, blank=False)
+    qualification_validity = models.CharField(max_length=80, verbose_name='证书有效期', null=False, blank=False)
+    qualification_authority = models.CharField(max_length=80, verbose_name='发证机关', null=False, blank=False)
+
+    class Meta:
+        db_table = u'qualification'
+        verbose_name = u'资质'
+        verbose_name_plural = u'资质'
+
+    def __str__(self):
+        return self.qualification_name
+
+
+class Register_person(models.Model):
+    company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
+                                    default='default_value')
+    register_person_name = models.CharField(max_length=80, verbose_name='姓名', null=False, blank=False)
+    register_person_type = models.CharField(max_length=80, verbose_name='注册类别', null=False, blank=False)
+    register_person_number = models.CharField(max_length=80, verbose_name='注册号', null=False, blank=False)
+    register_person_profession = models.CharField(max_length=80, verbose_name='注册专业', null=False, blank=False)
+
+    class Meta:
+        db_table = u'register_person'
+        verbose_name = u'注册人员'
+        verbose_name_plural = u'注册人员'
+
+    def __str__(self):
+        return self.register_person_name
+
+
 class Project(models.Model):
     company_name = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
                                     default='default_value')
@@ -155,7 +191,7 @@ class Wenshuwang(models.Model):
 
 # 采购网
 class CGW_inquire(models.Model):
-    companyName = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
+    company_name = models.CharField(max_length=80, verbose_name='公司名称', null=False, blank=False, unique=True)
     penalty = models.CharField(max_length=200, verbose_name='处罚结果', null=False, blank=False)
 
     class Meta:
@@ -164,7 +200,7 @@ class CGW_inquire(models.Model):
         verbose_name_plural = u'采购网'
 
     def __unicode__(self):
-        return self.companyName
+        return self.company_name
 
     def __str__(self):
-        return self.companyName
+        return self.company_name

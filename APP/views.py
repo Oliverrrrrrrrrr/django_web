@@ -2,10 +2,11 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information, Seal
+    Shareholder_information, Seal, Qualification_person, Register_person
 
 
 # index
@@ -127,6 +128,8 @@ def Qualification(request):
         phone = request.POST.get('phone')
         password = request.POST.get('password')
         companyname = request.POST.get('companyname')
+
+        # 天眼查
         if Tianyancha_User.objects.filter(phone=phone):
             tianyancha_user = Tianyancha_User.objects.get(phone=phone)
         else:
@@ -137,15 +140,26 @@ def Qualification(request):
                 tianyancha_spider(phone, password, companyname)
             except Exception as e:
                 print(e)
-                return HttpResponse("爬取失败")
+                return HttpResponse("天眼查爬取失败")
         # 找到数据库中对应企业的数据
         all_main_person = Main_person.objects.filter(company_name=companyname)
         all_project = Project.objects.filter(company_name=companyname)
         all_shareholder = Shareholder_information.objects.filter(company_name=companyname)
+        all_qualification = Qualification_person.objects.filter(company_name=companyname)
+        all_register_person = Register_person.objects.filter(company_name=companyname)
+        # # 采购网
+        # try:
+        #     get_cgw_data(companyname)
+        # except Exception as e:
+        #     print(e)
+        #     return HttpResponse("采购网爬取失败")
+
         return render(request, 'Qualification.html', {
             'all_main_person': all_main_person,
             'all_project': all_project,
-            'all_shareholder': all_shareholder
+            'all_shareholder': all_shareholder,
+            'all_qualification': all_qualification,
+            'all_register_person': all_register_person
         })
 
 
