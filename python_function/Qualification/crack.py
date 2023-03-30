@@ -38,7 +38,7 @@ class CrackTianyancha():
     def get_geetest_image(self, name='captcha.png'):
         ''' 获取验证码图片, return: 图片对象 '''
         top, bottom, left, right = self.get_position()
-        print('验证码位置', top, bottom, left, right)
+        # print('验证码位置', top, bottom, left, right)
         screenshot = self.get_screenshot()
         # 从网页截屏图片中裁剪处理验证图片
         captcha = screenshot.crop((left, top, right, bottom))

@@ -146,34 +146,34 @@ def Registered_personnel(driver, div, companyname):
     regist_all = re.sub(r'\n', ' ', regist_all)
     regist_all = re.sub(r'详情(\s+\d)*$', '', regist_all)
     regist_all = re.sub(r'详情', '', regist_all)
-    if check_pagination(div):
-        # 有分页
-        page_div = div.find_element(By.CLASS_NAME, 'pagination')
-        total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
-        for i in range(2, total_page + 1):
-            for page in page_div.find_elements(By.CLASS_NAME, 'num'):
-                if page.text == str(i):
-                    driver.execute_script("window.scrollTo(document.body.scrollHeight,0);")
-                    wait = WebDriverWait(page_div, 10)
-                    page = wait.until(EC.element_to_be_clickable(page))
-                    page.click()
-                    break
-            # 获取当前页面的工程项目信息
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)
-            # 等待页面加载完成
-            wait = WebDriverWait(driver, 10)
-            wait.until(
-                EC.presence_of_element_located((By.ID, '注册人员')))
-            regist = div.text
-            # 整理数据
-            regist = re.sub(r'\n', ' ', regist)
-            regist = re.sub(r'注册人员 \d* 全部人员 序号 姓名 注册类别 注册号（执业印章号） 注册专业 操作 ', '',
-                            regist)
-            regist = re.sub(r'详情(\s+\d)*$', '', regist)
-            regist = re.sub(r'详情', '', regist)
-            # 将每页的工程项目信息合并
-            regist_all = regist_all + regist
+    # if check_pagination(div):
+    #     # 有分页
+    #     page_div = div.find_element(By.CLASS_NAME, 'pagination')
+    #     total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
+    #     for i in range(2, total_page + 1):
+    #         for page in page_div.find_elements(By.CLASS_NAME, 'num'):
+    #             if page.text == str(i):
+    #                 driver.execute_script("window.scrollTo(document.body.scrollHeight,0);")
+    #                 wait = WebDriverWait(page_div, 10)
+    #                 page = wait.until(EC.element_to_be_clickable(page))
+    #                 page.click()
+    #                 break
+    #         # 获取当前页面的工程项目信息
+    #         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    #         time.sleep(2)
+    #         # 等待页面加载完成
+    #         wait = WebDriverWait(driver, 10)
+    #         wait.until(
+    #             EC.presence_of_element_located((By.ID, '注册人员')))
+    #         regist = div.text
+    #         # 整理数据
+    #         regist = re.sub(r'\n', ' ', regist)
+    #         regist = re.sub(r'注册人员 \d* 全部人员 序号 姓名 注册类别 注册号（执业印章号） 注册专业 操作 ', '',
+    #                         regist)
+    #         regist = re.sub(r'详情(\s+\d)*$', '', regist)
+    #         regist = re.sub(r'详情', '', regist)
+    #         # 将每页的工程项目信息合并
+    #         regist_all = regist_all + regist
     pattern = r'\s*\d+\s*\S{1}\s*(\S+)\s*((?:\S+师\s*)*)\s*((?:\S{1}\d{1,}\s)*)\s*(\S+)'
     matches = re.findall(pattern, regist_all)
     columns = ['姓名', '注册类别', ' 注册号（执业印章号） ', '注册专业']
@@ -200,36 +200,34 @@ def Engineering_project(driver, div, companyname):
     project = re.sub(r'\s*\d+(\s+\d+)*$', '', project)
     project = re.sub(r'详情', '', project)
     project_all = project
-    if check_pagination(project_div):
-        page_div = project_div.find_element(By.CLASS_NAME, 'pagination')
-        total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
-        proj = ""
-        for i in range(2, total_page + 1):
-            for page in page_div.find_elements(By.CLASS_NAME, 'num'):
-                if page.text == str(i):
-                    driver.execute_script("window.scrollTo(document.body.scrollHeight,0);")
-                    wait = WebDriverWait(page_div, 10)
-                    page = wait.until(EC.element_to_be_clickable(page))
-                    page.click()
-                    break
-            # 获取当前页面的工程项目信息
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)
-            # 等待页面加载完成
-            wait = WebDriverWait(driver, 10)
-            wait.until(
-                EC.presence_of_element_located((By.ID, '工程项目')))
-            proj = project_div.text
-            # 整理数据
-            proj = re.sub(r'\n', ' ', proj)
-            proj = re.sub(r'工程项目 \d* 全部项目 序号 项目编号 项目名称 项目属地 项目类别 建设单位 操作 ', '',
-                          proj)
-            proj = re.sub(r'\s*\d+(\s+\d+)*$', '', proj)
-            proj = re.sub(r'详情', '', proj)
-            # 将每页的工程项目信息合并
-            project_all = project_all + proj
-    else:
-        project_all = project
+    # if check_pagination(project_div):
+    #     page_div = project_div.find_element(By.CLASS_NAME, 'pagination')
+    #     total_page = len(page_div.find_elements(By.CLASS_NAME, 'num')) - 1
+    #     proj = ""
+    #     for i in range(2, total_page + 1):
+    #         for page in page_div.find_elements(By.CLASS_NAME, 'num'):
+    #             if page.text == str(i):
+    #                 driver.execute_script("window.scrollTo(document.body.scrollHeight,0);")
+    #                 wait = WebDriverWait(page_div, 10)
+    #                 page = wait.until(EC.element_to_be_clickable(page))
+    #                 page.click()
+    #                 break
+    #         # 获取当前页面的工程项目信息
+    #         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    #         time.sleep(2)
+    #         # 等待页面加载完成
+    #         wait = WebDriverWait(driver, 10)
+    #         wait.until(
+    #             EC.presence_of_element_located((By.ID, '工程项目')))
+    #         proj = project_div.text
+    #         # 整理数据
+    #         proj = re.sub(r'\n', ' ', proj)
+    #         proj = re.sub(r'工程项目 \d* 全部项目 序号 项目编号 项目名称 项目属地 项目类别 建设单位 操作 ', '',
+    #                       proj)
+    #         proj = re.sub(r'\s*\d+(\s+\d+)*$', '', proj)
+    #         proj = re.sub(r'详情', '', proj)
+    #         # 将每页的工程项目信息合并
+    #         project_all = project_all + proj
     # 将工程项目信息保存到数据库
     pattern = r'\s*\d+\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)\s*(\S+)'
     matches = re.findall(pattern, project_all)
@@ -287,7 +285,7 @@ def spider(driver, companyname):
             Building_qualifications(driver, construct_div, companyname)
         elif '注册人员' in first_word:
             Registered_personnel(driver, construct_div, companyname)
-        if '工程项目' in first_word:
+        elif '工程项目' in first_word:
             Engineering_project(driver, construct_div, companyname)
 
 

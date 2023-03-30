@@ -135,12 +135,12 @@ def Qualification(request):
         else:
             tianyancha_user = Tianyancha_User.objects.create(phone=phone, password=password)
         # 若数据库中无该公司数据则爬取
-        if not Main_person.objects.filter(company_name=companyname):
-            try:
-                tianyancha_spider(phone, password, companyname)
-            except Exception as e:
-                print(e)
-                return HttpResponse("天眼查爬取失败")
+        # if not Main_person.objects.filter(company_name=companyname):
+        try:
+            tianyancha_spider(phone, password, companyname)
+        except Exception as e:
+            print(e)
+            return HttpResponse("天眼查爬取失败")
         # 找到数据库中对应企业的数据
         all_main_person = Main_person.objects.filter(company_name=companyname)
         all_project = Project.objects.filter(company_name=companyname)
