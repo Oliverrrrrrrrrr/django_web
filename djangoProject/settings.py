@@ -77,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django',
         'USER': 'root',
-        'PASSWORD': 'ouyangyi2002',
+        'PASSWORD': '123L321',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -120,8 +120,16 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
-MEDIA_URL = '/Media/'
+STATIC_URL = '/media/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'media'),
+)
+
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = [
+#     os.path.join(BASE_DIR, 'media'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
