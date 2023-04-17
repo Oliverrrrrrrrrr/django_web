@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,15 +59,12 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div>                                        
                     <div class="col-md-6 order-first order-md-last"
                          style="min-height: 250px;background: var(--ref-gray-300);">
                         <div class="row">
                             <div class="col">
                                 <div style="text-align: center;margin-top: 20px;">
-
-<!-- ################################################################## -->
-
                                     <h3 class="fw-bold text-dark mb-3">检测结果</h3>
                                 </div>
                             </div>
@@ -75,45 +73,46 @@
                             <div class="col">
                                 {#调取seal数据库中的图片#}
                                 {% for seal in all_seal %}
-                                    <div class = "page__{{seal.seal_page}}">
-                                        <div><img class="w-100 h-100 fit-cover"
+                                    <div class="seal_picture" id="page__{{seal.seal_page}}" style="display:none">
+                                        <img class="w-100 h-100 fit-cover"
                                         src="../media/Seal_Picture/{{ seal.file_title }}/{{ seal.seal_page }}.png"
-                                        style="padding: 30px;padding-top: 0px;padding-bottom: 0px;"/></div>
+                                        />
                                     </div>                              
                                 {% endfor %}
                             </div> 
                         </div> 
-
-                                <div style="text-align: center;">
-                                    <h5 class="fw-bold text-black-50 mb-3" style="margin: 6px;">印章抽取图片</h5>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div>
-                                            <p id="pages"
-                                               style="margin: 16px;margin-top: 4px;margin-bottom: 33px;overflow-x: scroll">
-                                                存在印章的页码分别为：{{ pages }}</p>
-                                        </div>                                        
-                                        <div class="page-icon">
-                                            <button class="firstPage" onclick="first_click()" ><img src="../static/img/page-icon/left-end.png" style = "width:14px;height:15px" /></button>
-                                            <button class="beforePage" onclick="prev_click()" ><img src="../static/img/page-icon/page-left.png" style = "width:14px;height:15px" /></button>
-                                            <button>第<input id="currentPage" onchange="choose_page()" type="text" value="1"/>页</button>
-                                            <button>/&nbsp;&nbsp;&nbsp;共<input id="totalPage" type="button" value="{{page_len}}" readonly="readonly">页</button>
-                                            <button class="nextPage" onclick="next_click()"><img src="../static/img/page-icon/page-right.png" style = "width:14px;height:15px" /></button>
-                                            <button class="lastPage" onclick="last_click()"><img src="../static/img/page-icon/right-end.png" style = "width:14px;height:15px" /></button>			
-                                        </div>
-                                    </div>                                                                              
-                                        
-                                        <script src="../static/js/index.js" type="text/javascript" charset="utf-8"></script>                   
-
-<!-- ######################################################## -->   
-                            </div>
+                        <div style="text-align: center;">
+                            <h5 class="fw-bold text-black-50 mb-3" style="margin: 6px;">印章抽取图片</h5>
                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <div>
+                                    <p id="pages"
+                                        style="margin: 16px;margin-top: 4px;margin-bottom: 33px;overflow-x: scroll">
+                                        存在印章的页码分别为：{{ pages }}</p>
+                                </div>  
+                                <script>
+                                    window.onload = function () {
+                                        var divs = document.getElementsByClassName("seal_picture");
+                                        divs[0].style = "padding: 30px;padding-top: 0px;padding-bottom: 0px;";
+                                    }
+                                </script>                                      
+                                <div class="page-icon">
+                                    <button class="firstPage" onclick="first_click()" ><img src="../static/img/page-icon/left-end.png" style = "width:14px;height:15px" /></button>
+                                    <button class="beforePage" onclick="prev_click()" ><img src="../static/img/page-icon/page-left.png" style = "width:14px;height:15px" /></button>
+                                    <button>第<input id="currentPage" onchange="choose_page()" type="text" value="1"/>页</button>
+                                    <button>/&nbsp;&nbsp;&nbsp;共<input id="totalPage" type="button" value="{{page_len}}" readonly="readonly">页</button>
+                                    <button class="nextPage" onclick="next_click()"><img src="../static/img/page-icon/page-right.png" style = "width:14px;height:15px" /></button>
+                                    <button class="lastPage" onclick="last_click()"><img src="../static/img/page-icon/right-end.png" style = "width:14px;height:15px" /></button>			
+                                </div>
+                            </div>                                                                        
+                                <script src="../static/js/indexx.js" type="text/javascript" charset="utf-8"></script>
+                        </div>                   
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
     <section class="py-5" style="margin-top: -66px;">
         <div class="container">
             <div style="height: 109px;">
@@ -205,7 +204,7 @@
                                                              style="padding: 12.8px 12.8px;text-decoration: underline;margin: 0;font-family: Raleway, sans-serif;width: 352.917px;border-style: none;"
                                                              name="zhaobiao file"/></div>
                                     <button class="btn btn-primary shadow" type="submit" style="margin-top: 6px;">
-                                        导入文件
+                                        导入多个文件
                                     </button>
                                 </form>
                             </div>

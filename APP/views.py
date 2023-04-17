@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
@@ -178,16 +179,17 @@ def Repeatability(request):
                 return HttpResponse("文件不存在")
             # 未检测过则进行检测
             pdfFile = file.path.path  # 设置pdf路径
-            print("this is file path ######:",pdfFile)
+            #print("this is file path ######:",pdfFile)
             storePath = r"media/Seal_Picture" + "/" + filename  # 设置存储路径
             try:
                 pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
                 bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
+                
             except Exception as e:
                 print(e)
                 return HttpResponse("检测失败")
             
-
+        
         all_seal = Seal.objects.filter(file_title=filename)
         # 将所有页码拼接成字符串
         pages = ""
@@ -196,6 +198,9 @@ def Repeatability(request):
         for seal in all_seal:
             pages += seal.seal_page + ","
             all_pages.append(seal.seal_page)
+
+        # messages.success(request, "检测成功")#######################
+
         return render(request, 'Repeatability.html', {'all_seal': all_seal, 'pages': pages, 'page_len': page_len, 'all_pages': all_pages})
 
 
