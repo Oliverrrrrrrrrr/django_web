@@ -180,7 +180,7 @@ def Repeatability(request):
             # 未检测过则进行检测
             pdfFile = file.path.path  # 设置pdf路径
             #print("this is file path ######:",pdfFile)
-            storePath = r"media/Seal_Picture" + "/" + filename  # 设置存储路径
+            storePath = r"static/media/Seal_Picture" + "/" + filename  # 设置存储路径
             try:
                 pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
                 bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
