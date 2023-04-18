@@ -6,7 +6,7 @@ from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information, Seal, Qualification_person, Register_person
+    Shareholder_information, Seal, Qualification_person, Register_person, CGW_inquire
 
 
 # index
@@ -147,19 +147,33 @@ def Qualification(request):
         all_shareholder = Shareholder_information.objects.filter(company_name=companyname)
         all_qualification = Qualification_person.objects.filter(company_name=companyname)
         all_register_person = Register_person.objects.filter(company_name=companyname)
-        # # 采购网
-        # try:
-        #     get_cgw_data(companyname)
-        # except Exception as e:
-        #     print(e)
-        #     return HttpResponse("采购网爬取失败")
 
         return render(request, 'Qualification.html', {
             'all_main_person': all_main_person,
             'all_project': all_project,
             'all_shareholder': all_shareholder,
             'all_qualification': all_qualification,
-            'all_register_person': all_register_person
+            'all_register_person': all_register_person, })
+
+        #采购网
+    if request.method == 'GET':
+        return render(request, 'Qualification.html')
+    elif request.method == 'POST':
+        name = request.POST.get('companynname')
+        # 查询数据库中是否有该公司数据
+        if not CGW_inquire.objects.filter(company_name=name):
+            # 若无则爬取
+            try:
+                get_cgw_data(name)
+            except Exception as e:
+                print(e)
+                return HttpResponse("采购网爬取失败")
+        # 找到数据库中对应企业的数据
+        all_company_name = CGW_inquire.objects.filter(company_name=name)
+        all_penalty = CGW_inquire.objects.filter(company_name=name)
+        return render(request, 'CGWInquire.html', {
+            'all_company': all_company_name,
+            'all_penalty': all_penalty,
         })
 
 
@@ -195,3 +209,26 @@ def Repeatability(request):
 
 def Predict(request):
     return render(request, 'Predict.html')
+
+# 采购网
+def CGWInquire(request):
+    if request.method == 'GET':
+        return render(request, 'CGWInquire.html')
+    elif request.method == 'POST':
+        name = request.POST.get('companynname')
+        # 查询数据库中是否有该公司数据
+        if not CGW_inquire.objects.filter(company_name=name):
+            # 若无则爬取
+            try:
+                get_cgw_data(name)
+            except Exception as e:
+                print(e)
+                return HttpResponse("采购网爬取失败")
+        # 找到数据库中对应企业的数据
+        all_company_name = CGW_inquire.objects.filter(company_name=name)
+        all_penalty = CGW_inquire.objects.filter(company_name=name)
+        return render(request, 'CGWInquire.html', {
+            'all_company': all_company_name,
+            'all_penalty': all_penalty,
+        })
+

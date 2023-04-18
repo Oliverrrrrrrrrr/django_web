@@ -80,9 +80,9 @@ def check_pagination(div):
 # 主要人员
 def Main_personnel(driver, div, companyname):
     main_person = div.text
-    main_person = re.sub(r'\n最终受益人', '', main_person)
-    pattern = r'\d+\s*\S+\s*(\S+)\s*.*?\s*(\S+)\s*-\s*-'
-    main_person_match = re.findall(pattern, main_person)
+    main_person = re.sub(r'\n最终受益人', '', main_person)#通过正则表达式去掉最终受益人
+    pattern = r'\d+\s*\S+\s*(\S+)\s*.*?\s*(\S+)\s*-\s*-'#正则表达式匹配主要人员和职位
+    main_person_match = re.findall(pattern, main_person)#匹配主要人员和职位
     columns = ['主要人员', '职位']
     df = pd.DataFrame(main_person_match, columns=columns)
     # 保存到数据库

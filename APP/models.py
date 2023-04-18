@@ -195,7 +195,7 @@ class CGW_inquire(models.Model):
     penalty = models.CharField(max_length=200, verbose_name='处罚结果', null=False, blank=False)
 
     class Meta:
-        db_table = u'cgw_inquire'
+        db_table = u'CGW_inquire'
         verbose_name = u'采购网'
         verbose_name_plural = u'采购网'
 
@@ -204,3 +204,4 @@ class CGW_inquire(models.Model):
 
     def __str__(self):
         return self.company_name
+

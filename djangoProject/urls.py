@@ -30,4 +30,5 @@ urlpatterns = [
     path('Qualification/', Qualification, name='Qualification'),
     path('Repeatability/', Repeatability, name='Repeatability'),
     path('Predict/', Predict, name='Predict'),
+    path('CGWInquire/', CGWInquire, name='CGWInquire'),
 ]

@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from pip._internal import req
+import pandas as pd
+from APP.models import CGW_inquire
 
 
 # import pandas as pd
@@ -32,13 +34,26 @@ def get_cgw_data(companyName):
         # 获取全部 class 为 trShow 的标签，进行遍历
         a_data = soup.find_all('td')
         for i in range(3):
-            print("-----第" + str(i + 1) + "条信息-----")
+            #print("-----第" + str(i + 1) + "条信息-----")
             if (j < 22 and a < 26):
-                print("企业名称：" + a_data[j].text)
-                print("处罚结果：" + a_data[a].text)
-                j = j + 10;
-                a = a + 10;
+                #print("企业名称：" + a_data[j].text)
+                #print("处罚结果：" + a_data[a].text)
+                companyname = a_data[j].text
+                punishresult = a_data[a].text
+                columns = ['公司名称', '处罚结果']
+                df = pd.DataFrame(columns=columns)
+                df.loc[i] = [companyname, punishresult]
+
+                obj = CGW_inquire()
+                obj.company_name = df['公司名称'][i]
+                obj.penalty = df['处罚结果'][i]
+                if not CGW_inquire.objects.filter(company_name=companyname):
+                    obj.save()
+
+                j = j + 10
+                a = a + 10
                 i += 1
+
     elif tSnum1 == 0:
         req.encoding = "utf-8"
         soup = BeautifulSoup(res_text, 'html.parser')
@@ -46,6 +61,11 @@ def get_cgw_data(companyName):
         dd = resu_item.text.strip()
         dd = dd.replace("	", "")
         print(dd)
+        companyname = companyName
+        punishresult = '无查询结果'
+        obj = CGW_inquire()
+        if not CGW_inquire.objects.filter(company_name=companyname):
+            obj.save()
 
     else:
         print("-----本次共查询到 " + str(tSnum1) + " 条信息-----")
@@ -53,11 +73,20 @@ def get_cgw_data(companyName):
         # 获取全部 class 为 trShow 的标签，进行遍历
         a_data = soup.find_all('td')
         for i in range(0, tSnum1):
-            print("-------第" + str(i + 1) + "条信息-------")
-            print("企业名称：" + a_data[j].text)
-            print("处罚结果：" + a_data[a].text)
-            j = j + 10;
-            a = a + 10;
-            i += 1
+            #print("-------第" + str(i + 1) + "条信息-------")
+           # print("企业名称：" + a_data[j].text)
+            #print("处罚结果：" + a_data[a].text)
+
+            companyname = a_data[j].text
+            punishresult = a_data[a].text
+            columns = ['公司名称', '处罚结果']
+            df = pd.DataFrame(columns=columns)
+            df.loc[i] = [companyname, punishresult]
+            obj = CGW_inquire()
+            obj.company_name = df['公司名称'][i]
+            obj.penalty = df['处罚结果'][i]
+            if not CGW_inquire.objects.filter(company_name=companyname):
+                obj.save()
+            j = j + 10; a = a + 10; i += 1
 
 # get_cgw_data('上海市机械设备成套（集团）有限公司')
