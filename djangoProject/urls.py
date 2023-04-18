@@ -31,3 +31,6 @@ urlpatterns = [
     path('Repeatability/', Repeatability, name='Repeatability'),
     path('Predict/', Predict, name='Predict'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
