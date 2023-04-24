@@ -6,8 +6,9 @@ from django.contrib import messages
 from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
+from python_function.Repeatability.duplicate_checking.duplicate_paragraph import dup_paragraph
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information, Seal, Qualification_person, Register_person
+    Shareholder_information, Seal, Qualification_person, Register_person, Duplicate
 
 
 # index
@@ -165,43 +166,122 @@ def Qualification(request):
 
 
 def Repeatability(request):
-    # 印章检测函数接口
     if request.method == 'GET':
         return render(request, 'Repeatability.html')
     elif request.method == 'POST':
-        filename = request.POST.get('project name')
-        # 查看数据库中是否已有检测结果
-        if not Seal.objects.filter(file_title=filename):
+        # 印章检测函数接口
+        type = request.POST.get('type')
+        if type == '印章检测':
+            filename = request.POST.get('project name')
+            # 查看数据库中是否已有检测结果
+            if not Seal.objects.filter(file_title=filename):
+                # 调取数据库里的pdf
+                try:
+                    file = UploadProjectFile.objects.get(title=filename + ".pdf")
+                except:
+                    return HttpResponse("文件不存在")
+                # 未检测过则进行检测
+                pdfFile = file.path.path  # 设置pdf路径                
+                storePath = r"static/media/Seal_Picture" + "/" + filename  # 设置存储路径
+                try:
+                    pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
+                    bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
+                    
+                except Exception as e:
+                    print(e)
+                    return HttpResponse("检测失败")            
+            
+            all_seal = Seal.objects.filter(file_title=filename)
+            # 将所有页码拼接成字符串
+            pages = ""
+            page_len = len(all_seal)
+            all_pages = []
+            for seal in all_seal:
+                pages += seal.seal_page + ","
+                all_pages.append(seal.seal_page)
+
+            return render(request, 'Repeatability.html', {'all_seal': all_seal, 'pages': pages, 'page_len': page_len, 'all_pages': all_pages})
+        
+        
+        # 重复字段检测函数接口
+        elif type == '重复字段检测':
+            
+            name_list = []
+            name_list=[]#'media/file/project_file/上海浦海测绘有限公司技术部分.pdf', 'media/file/project_file/上海祥阳水利勘测设计有限公司技术部分.pdf']
+            start_list = []#1,1]
+            end_list = []#100,30]
+            standard_name = []
+            standard_start = []
+            standard_end = []
+
+            # importing = request.POST.get('importing')           
+
+            # # 查看数据库中是否已有检测结果
+            # if not Duplicate.objects.filter(file_pair=name_list):
             # 调取数据库里的pdf
+            # try:
+            #     file = UploadProjectFile.objects.get(title=name_list[0] + ".pdf")
+            # except:
+            #     return HttpResponse("文件不存在")
+            # 未检测过则进行检测   
+
+
+            start_number = int(request.POST.get('InputMatchingStringLimit'))
+            # start_number = []
+            # start_number.append(start_num)
+
+            standard_number = int(request.POST.get('InputLibraryStringLimit'))
+            # standard_number = []
+            # standard_number.append(standard_num)
+
+            standard_n = request.POST.get('InputStandardLibrary')
+            # standard_n = "../file/project_file/" + standard_n#"../../../file/project_file/" + standard_n            
+            file = UploadProjectFile.objects.get(title=standard_n + ".pdf")
+            
+            L = 'media/'+ str(file.path)
+            standard_name.append(L)
+
+            standard_s = int(request.POST.get('InputStandardStartPage'))            
+            standard_start.append(standard_s)
+
+            standard_e = int(request.POST.get('InputStandardEndPage'))            
+            standard_end.append(standard_e)
+
+            # while importing:
+            # file_name = request.POST.get('file_name')
+            
+            # file = UploadProjectFile.objects.get(title=file_name + ".pdf")
+            # M = 'media/'+ str(file.path)
+            # name_list.append(M)
+            file_name = request.POST.getlist('file_name')
+            start_list = request.POST.getlist('InputStartPage')
+            end_list = request.POST.getlist('InputEndPage')
+            
+            for i in file_name:
+                file = UploadProjectFile.objects.get(title=i + ".pdf")
+                M = 'media/'+ str(file.path)
+                name_list.append(M) 
+            
+            for i in range(len(file_name)):
+                start_list[i] = int(start_list[i])
+                end_list[i] = int(end_list[i])        
+
+            # start_page = int(request.POST.get('InputStartPage'))
+            # end_page = int(request.POST.get('InputEndPage'))
+            # start_list.append(start_page)   #request.POST.getlist('InputStartPage')
+            # end_list.append(end_page)
+            
+            # name_list = request.POST.getlist('file_name')
+            # start_list = request.POST.getlist('InputStartPage')
+            # end_list = request.POST.getlist('InputEndPage')                  
+
             try:
-                file = UploadProjectFile.objects.get(title=filename + ".pdf")
-            except:
-                return HttpResponse("文件不存在")
-            # 未检测过则进行检测
-            pdfFile = file.path.path  # 设置pdf路径
-            #print("this is file path ######:",pdfFile)
-            storePath = r"static/media/Seal_Picture" + "/" + filename  # 设置存储路径
-            try:
-                pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
-                bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
-                
+                output_str,contrast_output = dup_paragraph(standard_name,name_list,standard_start,standard_end,start_list,end_list,start_number,standard_number)
             except Exception as e:
                 print(e)
                 return HttpResponse("检测失败")
-            
-        
-        all_seal = Seal.objects.filter(file_title=filename)
-        # 将所有页码拼接成字符串
-        pages = ""
-        page_len = len(all_seal)
-        all_pages = []
-        for seal in all_seal:
-            pages += seal.seal_page + ","
-            all_pages.append(seal.seal_page)
-
-        # messages.success(request, "检测成功")#######################
-
-        return render(request, 'Repeatability.html', {'all_seal': all_seal, 'pages': pages, 'page_len': page_len, 'all_pages': all_pages})
+            return render(request, 'Repeatability.html', {'output_str': output_str, 'contrast_output': contrast_output})
+    
 
 
 def Predict(request):
