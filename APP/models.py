@@ -159,6 +159,22 @@ class Seal(models.Model):
 
     def __str__(self):
         return self.file_title
+    
+class Duplicate(models.Model):
+    file_pair = models.CharField(max_length=100, verbose_name='文件对')   
+    dup_page = models.CharField(max_length=100, verbose_name='重复页位置')
+    dup_content = models.CharField(max_length=500, verbose_name='重复段内容')
+    standard_lib = models.FileField(upload_to='file/Standard_Lib', verbose_name='标准库')
+    lib_name = models.CharField(max_length=100, verbose_name='标准库名')
+    still_dup_content = models.CharField(max_length=500, verbose_name='仍重复内容')
+
+    class Meta:
+        db_table = u'duplicate'
+        verbose_name = u'重复段'
+        verbose_name_plural = u'重复段'
+
+    def __str__(self):
+        return self.file_title
 
 
 # 文书网用户

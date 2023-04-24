@@ -6,8 +6,8 @@ def input_standard(name_list,start_list=[1,1,1],end_list=[1000,1000,1000]):# nam
     if(len(name_list)==len(start_list) and len(end_list)==len(start_list)):
         standard_str = []
         standard_str_pages = []
-        for j in range(len(name_list)):
-            pdfFileObj = open(name_list[j]+'.pdf', 'rb') #'上海市水闸维修养护规程.pdf'
+        for j in range(len(name_list)):            
+            pdfFileObj = open(name_list[j],'rb')#+'.pdf', 'rb') #'上海市水闸维修养护规程.pdf'            
             pdfReader = PyPDF2.PdfReader(pdfFileObj)
             standard = ''''''
             standard_pages = ''''''
@@ -29,7 +29,7 @@ def input_chachong(name_list,start_list=[1,1,1],end_list=[1000,1000,1000]):# nam
         list_str = []
         list_str_pages = []
         for j in range(len(name_list)):
-            pdfFileObj = open(name_list[j]+'.pdf', 'rb') #'上海市水闸维修养护规程.pdf'
+            pdfFileObj = open(name_list[j],'rb')#+'.pdf', 'rb') #'上海市水闸维修养护规程.pdf'
             pdfReader = PyPDF2.PdfReader(pdfFileObj)
             standard = ''''''
             standard_pages = ''''''
@@ -125,6 +125,8 @@ def operater(str1,str2,start_number):
 
 #处理多个字符串
 def input_str(list_str,list_str_pages,standard_str,standard_str_pages,start_number,standard_number):
+    output_str = ""
+    contrast_output = ""
     for element1 in range(0,len(list_str)-1):
         for element2 in range(element1+1,len(list_str)):
             str1 = list_str[element1]
@@ -135,16 +137,23 @@ def input_str(list_str,list_str_pages,standard_str,standard_str_pages,start_numb
             if(is_match):
                 pp1 = pages(pages1,is_match)
                 pp2 = pages(pages2,is_match)
-                print(element1+1,'和',element2+1,'\033[1;31m有可能有重复,请与标准库对比\033[0m')
-                print('重复页数为：',element1+1,'的页数为',pp1,'     ',element2+1,'的页数为',pp2)
-                print('重复内容为：',is_match)
-                contrast(is_match,standard_str,standard_str_pages,standard_number)
-                print('\n')
-            else:
-                print(element1+1,'和',element2+1,'没有重复')
-                print('\n')
+                # print(element1+1,'和',element2+1,'\033[1;31m有可能有重复,请与标准库对比\033[0m')
+                # print('重复页数为：',element1+1,'的页数为',pp1,'     ',element2+1,'的页数为',pp2)
+                # print('重复内容为：',is_match)
+                output_str += str(element1+1)+'和'+str(element2+1)+'有可能有重复,请与标准库对比\n'
+                output_str += '重复页数为：'+str(element1+1)+'的页数为'+str(pp1)+'     '+str(element2+1)+'的页数为'+str(pp2)+'\n'
+                output_str += '重复内容为：'+str(is_match)+'\n'
+                
+                contrast_output = contrast(is_match,standard_str,standard_str_pages,standard_number)+'\n'
 
-                #计算页数
+            else:
+                # print(element1+1,'和',element2+1,'没有重复')
+                # print('\n')
+                output_str += str(element1+1)+'和'+str(element2+1)+'没有重复\n'
+                output_str += '\n'
+    return output_str,contrast_output
+
+#计算页数
 def pages(pages,is_match):
     res = match(['啊啊啊啊啊'], pages)
     loc = res[1]
@@ -185,6 +194,7 @@ def pages(pages,is_match):
 
 # 与标准库对比，删除与标准库中相同的元素
 def contrast(is_match,standard_str,standard_str_pages,standard_number):
+    contrast_output = ""
     text_num = []
     delete_all = []
     pp1 = []
@@ -201,17 +211,25 @@ def contrast(is_match,standard_str,standard_str_pages,standard_number):
                     is_match[j] = is_match[j].replace(element,'')
                 
     if(text_num!=[]):
-        print('\033[1;31m与标准库对比后:\033[0m')
+        # print('\033[1;31m与标准库对比后:\033[0m')
+        contrast_output += "\033[1;31m与标准库对比后:\033[0m"
         for t in range(0,len(text_num)):
-            print('存在内容与标准库',text_num[t]+1,'重复，重复内容所在标准库的页数为：',pp1[t])
-            print('内容为',delete_all[t])
-            print('\n')
+            # print('存在内容与标准库',text_num[t]+1,'重复，重复内容所在标准库的页数为：',pp1[t])
+            # print('内容为',delete_all[t])
+            # print('\n')
+            contrast_output += "存在内容与标准库"+str(text_num[t]+1)+"重复，重复内容所在标准库的页数为："+str(pp1[t])
+            contrast_output += "内容为"+str(delete_all[t])
+            contrast_output += "\n"
         for s in is_match:
             length += len(s)
-        print('删除标准库中内容后，剩余内容共',length,'字,剩余内容为')
-        print(is_match)
+        # print('删除标准库中内容后，剩余内容共',length,'字,剩余内容为')
+        # print(is_match)
+        contrast_output += "删除标准库中内容后，剩余内容共'+str(length)+'字,剩余内容为"
+        contrast_output += str(is_match)
     else:
-        print('\033[1;31m与标准库对比后，无合法重复内容\033[0m')
+        # print('\033[1;31m与标准库对比后，无合法重复内容\033[0m')
+        contrast_output += "\033[1;31m与标准库对比后，无合法重复内容\033[0m"
+    return contrast_output
 
 
 def wrap(start_number,standard_number,standard_name,standard_start,standard_end,name_list,start_list,end_list):
@@ -234,21 +252,25 @@ def wrap(start_number,standard_number,standard_name,standard_start,standard_end,
     for s in standard_string_pages:
         pre_str = pre_processing(s)
         standard_str_pages.append(pre_str)
-    input_str(list_str,list_str_pages,standard_str,standard_str_pages,start_number,standard_number)
+    output_str,contrast_output = input_str(list_str,list_str_pages,standard_str,standard_str_pages,start_number,standard_number)
+    return output_str,contrast_output
 
-def main():
-    start_number = 300 # 匹配字符串的长度下线
-    standard_number = 50 # 标准库中有的字符串最低长度
-    standard_name =  [ '招标文件-2018年度海塘里程桩、单位分界桩设置(陆域及横沙)（定稿）2018-4-19'] # 标准库文件名称
-    standard_start = [1] # 标准库起始页
-    standard_end = [49]  # 标准库终止页
-    name_list=[ '上海城欣测绘有限公司技术部分', '上海浦海测绘有限公司技术部分', '上海祥阳水利勘测设计有限公司技术部分'] # 查重文件名称
-    start_list=[1,1,1] # 查重文件起始页
-    end_list=[29,48,27] # 查重文件终止页
-    wrap(start_number,standard_number,standard_name,standard_start,standard_end,name_list,start_list,end_list)
+def dup_paragraph(standard_name,name_list,standard_start = [1] ,standard_end = [49],start_list = [1,1,1],end_list = [29,48,27],start_number = 300,standard_number = 50):
+    # standard_name =  [ '招标文件-2018年度海塘里程桩、单位分界桩设置(陆域及横沙)（定稿）2018-4-19'] # 标准库文件名称
+    # standard_start = [1] # 标准库起始页
+    # standard_end = [49]  # 标准库终止页
+    # start_number = 300 # 匹配字符串的长度下线
+    # standard_number = 50 # 标准库中有的字符串最低长度
+    # name_list=[ '上海城欣测绘有限公司技术部分', '上海浦海测绘有限公司技术部分', '上海祥阳水利勘测设计有限公司技术部分'] # 查重文件名称
+    # start_list=[1,1,1] # 查重文件起始页
+    # end_list=[29,48,27] # 查重文件终止页
+    output_str,contrast_output = wrap(start_number,standard_number,standard_name,standard_start,standard_end,name_list,start_list,end_list)
+    return output_str,contrast_output
     
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     output_str,contrast_output = dup_paragraph()
+#     print("output_str:",output_str,'\n')
+#     print("contrast_output:",contrast_output,'\n')
 
 
 
