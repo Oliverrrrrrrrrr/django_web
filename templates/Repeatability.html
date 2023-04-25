@@ -26,9 +26,16 @@
                 <li class="nav-item"><a class="nav-link" href={% url 'Predict' %}><span
                         style="color: var(--bs-nav-link-hover-color);">中标概率预测</span></a></li>
                 <li class="nav-item"></li>
-                <li class="nav-item"><a class="nav-link" href={% url 'register' %}>注册</a></li>
-            </ul>
-            <a class="btn btn-primary shadow" role="button" href={% url 'login' %}>登录</a>
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href={% url 'register' %}>注册</a></li>
+                {% endif %}            </ul>
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary shadow" role="button" href={% url 'home' %}>{{ request.user.username }}</a>
+                <a class="btn btn-primary shadow" role="button" href={% url 'logout' %}>退出登录</a>
+            {% endif %}
+            {% if not request.user.is_authenticated %}
+                <a class="btn btn-primary shadow" role="button" href={% url 'login' %}>登录</a>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -52,14 +59,14 @@
                                     <h2 class="fw-bold text-white mb-3">输入文件名（已导入文件）</h2><input
                                             class="shadow-sm form-control" type="text" name="project name"
                                             placeholder="文件名称" style="width: 353px;"/>
-                                            <input type="hidden" value="印章检测" name="type"/>
+                                    <input type="hidden" value="印章检测" name="type"/>
                                     <button class="btn btn-primary shadow" type="submit" style="margin-top: 21px;">
                                         调取文件
                                     </button>
                                 </form>
                             </div>
                         </div>
-                    </div>                                        
+                    </div>
                     <div class="col-md-6 order-first order-md-last"
                          style="min-height: 250px;background: var(--ref-gray-300);">
                         <div class="row">
@@ -73,14 +80,14 @@
                             <div class="col">
                                 {#调取seal数据库中的图片#}
                                 {% for seal in all_seal %}
-                                    <div class="seal_picture" id="page__{{seal.seal_page}}" style="display:none">
+                                    <div class="seal_picture" id="page__{{ seal.seal_page }}" style="display:none">
                                         <img class="w-100 h-100 fit-cover"
-                                        src="../static/media/Seal_Picture/{{ seal.file_title }}/{{ seal.seal_page }}.png"
+                                             src="../static/media/Seal_Picture/{{ seal.file_title }}/{{ seal.seal_page }}.png"
                                         />
-                                    </div>                              
+                                    </div>
                                 {% endfor %}
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                         <div style="text-align: center;">
                             <h5 class="fw-bold text-black-50 mb-3" style="margin: 6px;">印章抽取图片</h5>
                         </div>
@@ -88,31 +95,42 @@
                             <div class="col">
                                 <div>
                                     <p id="pages"
-                                        style="margin: 16px;margin-top: 4px;margin-bottom: 33px;overflow-x: scroll">
+                                       style="margin: 16px;margin-top: 4px;margin-bottom: 33px;overflow-x: scroll">
                                         存在印章的页码分别为：{{ pages }}</p>
-                                </div>  
-                                <script>
-                                    window.onload = function () {                                        
-                                        var divs = document.getElementsByClassName("seal_picture");
-                                        divs[0].style = "padding: 30px;padding-top: 0px;padding-bottom: 0px;";                                                                                                                          
-                                    }
-                                </script>                                      
-                                <div class="page-icon">
-                                    <button class="firstPage" onclick="first_click()" ><img src="../static/img/page-icon/left-end.png" style = "width:14px;height:15px" /></button>
-                                    <button class="beforePage" onclick="prev_click()" ><img src="../static/img/page-icon/page-left.png" style = "width:14px;height:15px" /></button>
-                                    <button>第<input id="currentPage" onchange="choose_page()" type="text" value="1"/>页</button>
-                                    <button>/&nbsp;&nbsp;&nbsp;共<input id="totalPage" type="button" value="{{page_len}}" readonly="readonly">页</button>
-                                    <button class="nextPage" onclick="next_click()"><img src="../static/img/page-icon/page-right.png" style = "width:14px;height:15px" /></button>
-                                    <button class="lastPage" onclick="last_click()"><img src="../static/img/page-icon/right-end.png" style = "width:14px;height:15px" /></button>			
                                 </div>
-                            </div>                                                                        
-                                <script src="../static/js/indexx.js" type="text/javascript" charset="utf-8"></script>
-                        </div>                   
+                                <script>
+                                    window.onload = function () {
+                                        var divs = document.getElementsByClassName("seal_picture");
+                                        divs[0].style = "padding: 30px;padding-top: 0px;padding-bottom: 0px;";
+                                    }
+                                </script>
+                                <div class="page-icon">
+                                    <button class="firstPage" onclick="first_click()"><img
+                                            src="../static/img/page-icon/left-end.png" style="width:14px;height:15px"/>
+                                    </button>
+                                    <button class="beforePage" onclick="prev_click()"><img
+                                            src="../static/img/page-icon/page-left.png" style="width:14px;height:15px"/>
+                                    </button>
+                                    <button>第<input id="currentPage" onchange="choose_page()" type="text" value="1"/>页
+                                    </button>
+                                    <button>/&nbsp;&nbsp;&nbsp;共<input id="totalPage" type="button"
+                                                                        value="{{ page_len }}" readonly="readonly">页
+                                    </button>
+                                    <button class="nextPage" onclick="next_click()"><img
+                                            src="../static/img/page-icon/page-right.png"
+                                            style="width:14px;height:15px"/></button>
+                                    <button class="lastPage" onclick="last_click()"><img
+                                            src="../static/img/page-icon/right-end.png" style="width:14px;height:15px"/>
+                                    </button>
+                                </div>
+                            </div>
+                            <script src="../static/js/indexx.js" type="text/javascript" charset="utf-8"></script>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> 
+    </section>
     <section class="py-5" style="margin-top: -66px;">
         <div class="container">
             <div style="height: 109px;">
@@ -136,7 +154,7 @@
                                     </button>
                                 </form>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="col-md-6 order-first order-md-last"
@@ -196,73 +214,83 @@
             <div class="bg-dark border rounded border-0 border-dark overflow-hidden">
                 <div class="row g-0">
                     <div class="col-md-6" style="background: var(--ref-gray-600);">
-                        <div class="text-white p-4 p-md-5">                            
+                        <div class="text-white p-4 p-md-5">
                             <div id="tab-1" class="tab-pane active" role="tabpanel">
                                 <div class="text-start text-bg-light d-lg-flex justify-content-lg-center table-responsive"
                                      style="margin: 0px;margin-top: 28px;">
                                     <!-- <div class="bg-white shadow-lg d-lg-flex justify-content-lg-center" 
                                          style="width: 630.333px;display: block;position: relative;margin: 47px;"> -->
-                                         <div id = "add_file_tmplate" style="display:none">
+                                    <div id="add_file_tmplate" style="display:none">
+                                        <label for="FileToTest">查重文件名称</label>
+                                        <div class="mb-3"><input class="shadow-sm form-control form-control"
+                                                                 type="text" name="file_name"
+                                                                 placeholder="查重文件名称"/></div>
+                                        <!-- 一个一个输入文件名称 -->
+                                        <div class="form-group">
+                                            <label for="StartPage">查重起始页码</label>
+                                            <input type="number" class="form-control" name="InputStartPage"
+                                                   placeholder="默认值：1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="EndPage">查重终止页码</label>
+                                            <input type="number" class="form-control" name="InputEndPage"
+                                                   placeholder="默认值：100">
+                                        </div>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data" style="margin-top: 46px;"
+                                          id="thisform">
+                                        <input type="hidden" value="重复字段检测" name="type"/>
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="MatchingStringLimit">匹配字符串的长度下限</label>
+                                            <input type="text" class="form-control" name="InputMatchingStringLimit"
+                                                   placeholder="默认值:300">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="LibraryStringLimit">标准库中有的字符串最低长度</label>
+                                            <input type="text" class="form-control" name="InputLibraryStringLimit"
+                                                   placeholder="默认值:50">
+                                        </div>
+                                        <br> </br>
+                                        <div class="form-group">
+                                            <label for="StandardLibrary">标准库名称</label>
+                                            <input type="text" class="form-control" name="InputStandardLibrary"
+                                                   placeholder="文件名称" name="standard_name">
+                                        </div>
+                                        <!-- <div class="mb-3"><input
+                                          class="form-control form-control-sm form-control" type="file"
+                                          multiple
+                                          style="padding: 12.8px 12.8px;text-decoration: underline;margin: 0;font-family: Raleway, sans-serif;width: 352.917px;border-style: none;"
+                                          name="standard_name"/></div> -->
+                                        <div class="form-group">
+                                            <label for="StandardStartPage">标准库起始页</label>
+                                            <input type="text" class="form-control" name="InputStandardStartPage"
+                                                   placeholder="默认值：1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="StandardEndPage">标准库终止页</label>
+                                            <input type="text" class="form-control" name="InputStandardEndPage"
+                                                   placeholder="默认值：50">
+                                        </div>
+                                        <br> </br>
+                                        <div id="add_file">
                                             <label for="FileToTest">查重文件名称</label>
                                             <div class="mb-3"><input class="shadow-sm form-control form-control"
-                                                                    type="text" name="file_name"                                                                     
-                                                                    placeholder="查重文件名称"/></div>                                                                                                                                                                                  
-                                            <!-- 一个一个输入文件名称 --> 
+                                                                     type="text" name="file_name"
+                                                                     placeholder="查重文件名称"/></div>
+                                            <!-- 一个一个输入文件名称 -->
                                             <div class="form-group">
                                                 <label for="StartPage">查重起始页码</label>
-                                                <input type="number" class="form-control" name="InputStartPage" placeholder="默认值：1">
-                                            </div>                                            
+                                                <input type="number" class="form-control" name="InputStartPage"
+                                                       placeholder="默认值：1">
+                                            </div>
                                             <div class="form-group">
                                                 <label for="EndPage">查重终止页码</label>
-                                                <input type="number" class="form-control" name="InputEndPage" placeholder="默认值：100">                                                
+                                                <input type="number" class="form-control" name="InputEndPage"
+                                                       placeholder="默认值：100">
                                             </div>
                                         </div>
-                                        <form method="post" enctype="multipart/form-data" style="margin-top: 46px;" id="thisform">
-                                            <input type="hidden" value="重复字段检测" name="type"/>
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                                <label for="MatchingStringLimit">匹配字符串的长度下限</label>
-                                                <input type="text" class="form-control" name="InputMatchingStringLimit" placeholder="默认值:300">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="LibraryStringLimit">标准库中有的字符串最低长度</label>
-                                                <input type="text" class="form-control" name="InputLibraryStringLimit" placeholder="默认值:50">
-                                              </div> 
-                                              <br>  </br>
-                                            <div class="form-group">
-                                                <label for="StandardLibrary">标准库名称</label>
-                                                <input type="text" class="form-control" name="InputStandardLibrary" placeholder="文件名称" name = "standard_name">
-                                              </div>
-                                              <!-- <div class="mb-3"><input
-                                                class="form-control form-control-sm form-control" type="file"
-                                                multiple
-                                                style="padding: 12.8px 12.8px;text-decoration: underline;margin: 0;font-family: Raleway, sans-serif;width: 352.917px;border-style: none;"
-                                                name="standard_name"/></div> -->
-                                            <div class="form-group">
-                                                <label for="StandardStartPage">标准库起始页</label>
-                                                <input type="text" class="form-control" name="InputStandardStartPage" placeholder="默认值：1">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="StandardEndPage">标准库终止页</label>
-                                                <input type="text" class="form-control" name="InputStandardEndPage" placeholder="默认值：50">
-                                            </div>
-                                            <br>  </br>                                            
-                                           <div id = "add_file">
-                                                <label for="FileToTest">查重文件名称</label>
-                                                <div class="mb-3"><input class="shadow-sm form-control form-control"
-                                                                        type="text" name="file_name"                                                                     
-                                                                        placeholder="查重文件名称"/></div>                                                                                                                                                                                  
-                                                <!-- 一个一个输入文件名称 --> 
-                                                <div class="form-group">
-                                                    <label for="StartPage">查重起始页码</label>
-                                                    <input type="number" class="form-control" name="InputStartPage" placeholder="默认值：1">
-                                                </div>                                            
-                                                <div class="form-group">
-                                                    <label for="EndPage">查重终止页码</label>
-                                                    <input type="number" class="form-control" name="InputEndPage" placeholder="默认值：100">                                                
-                                                </div>
-                                           </div>                                                                                                                
-                                            <script type="text/jscript">                                            
+                                        <script type="text/jscript">
                                                 add_div = function(){
                                                     var tmp=document.getElementById('add_file_tmplate');
                                                     var ad=document.getElementById('add_file');
@@ -272,26 +300,31 @@
                                                     // thisform.appendChild(adiv); 
                                                     ad.appendChild(adiv);                                                   
                                                 }
-                                            </script>
-                                            <button class = "btn btn-primary shadow" onclick="add_div()" type = "button">继续添加文件</button>
-                                            
-                                            <!-- <div class="mb-5">
-                                                <button class="btn btn-primary shadow" type="submit">继续输入文件
-                                                </button>
-                                                <input type="hidden" value="1" name="importing"/>                                               
-                                            </div>                               
-                                            <h8 class="fw-bold text-black mb-9">将所有需检测的文件导入后，点击开始检测按钮</h8>
-                                            <div class="mb-5">
-                                                <button class="btn btn-primary shadow" type="submit">检测文件输入完毕
-                                                </button>
-                                                <imput type="hidden" value="0" name="importing"/>
-                                            </div> -->
 
-                                            <br> </br>
-                                            <div class="mb-5">
-                                                <button class="btn btn-primary shadow" type="submit">开始检测</button>
-                                            </div>
-                                        </form>
+
+
+                                        </script>
+                                        <button class="btn btn-primary shadow" onclick="add_div()" type="button">
+                                            继续添加文件
+                                        </button>
+
+                                        <!-- <div class="mb-5">
+                                            <button class="btn btn-primary shadow" type="submit">继续输入文件
+                                            </button>
+                                            <input type="hidden" value="1" name="importing"/>
+                                        </div>
+                                        <h8 class="fw-bold text-black mb-9">将所有需检测的文件导入后，点击开始检测按钮</h8>
+                                        <div class="mb-5">
+                                            <button class="btn btn-primary shadow" type="submit">检测文件输入完毕
+                                            </button>
+                                            <imput type="hidden" value="0" name="importing"/>
+                                        </div> -->
+
+                                        <br> </br>
+                                        <div class="mb-5">
+                                            <button class="btn btn-primary shadow" type="submit">开始检测</button>
+                                        </div>
+                                    </form>
                                     <!-- </div> -->
                                 </div>
                             </div>
@@ -308,11 +341,11 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="shadow-sm" 
-                                style="margin-left: 18px;margin-right: 18px;border-bottom-style: solid;">
+                                <div class="shadow-sm"
+                                     style="margin-left: 18px;margin-right: 18px;border-bottom-style: solid;">
                                     <h4 class="fw-bold text-dark mb-3">重复文段内容</h4>
                                     <p style="margin: 16px;margin-top: 4px;margin-bottom: 33px;height: 749.344px;">
-                                        重复内容{{output_str}}
+                                        重复内容{{ output_str }}
                                 </div>
                             </div>
                         </div>
@@ -320,7 +353,8 @@
                             <div class="col">
                                 <div style="margin-left: 18px;margin-top: 10px;">
                                     <h4 class="fw-bold text-dark mb-3">去除标准库中内容后的重复字段</h4>
-                                    <p style="margin: 16px;margin-top: 4px;margin-bottom: 33px;">重复字段：{{contrast_output}}</p>
+                                    <p style="margin: 16px;margin-top: 4px;margin-bottom: 33px;">
+                                        重复字段：{{ contrast_output }}</p>
                                 </div>
                             </div>
                         </div>
@@ -331,64 +365,7 @@
     </section>
 
 </section>
-<footer>
-    <div class="container py-4 py-lg-5">
-        <div class="row row-cols-2 row-cols-md-4">
-            <div class="col-12 col-md-3">
-                <div class="fw-bold d-flex align-items-center mb-2"><span>Visualization</span></div>
-                <p class="text-muted">Sem eleifend donec molestie, integer quisque orci aliquam.</p>
-            </div>
-            <div class="col-sm-4 col-md-3 text-lg-start d-flex flex-column">
-                <h3 class="fs-6 fw-bold">Services</h3>
-                <ul class="list-unstyled">
-                    <li><a href="#">Web design</a></li>
-                    <li><a href="#">Development</a></li>
-                    <li><a href="#">Hosting</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-4 col-md-3 text-lg-start d-flex flex-column">
-                <h3 class="fs-6 fw-bold">About</h3>
-                <ul class="list-unstyled">
-                    <li><a href="#">Company</a></li>
-                    <li><a href="#">Team</a></li>
-                    <li><a href="#">Legacy</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-4 col-md-3 text-lg-start d-flex flex-column">
-                <h3 class="fs-6 fw-bold">Careers</h3>
-                <ul class="list-unstyled">
-                    <li><a href="#">Job openings</a></li>
-                    <li><a href="#">Employee success</a></li>
-                    <li><a href="#">Benefits</a></li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <div class="text-muted d-flex justify-content-between align-items-center pt-3">
-            <p class="mb-0">Copyright © 2023 Visualization</p>
-            <ul class="list-inline mb-0">
-                <li class="list-inline-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                         viewBox="0 0 16 16" class="bi bi-facebook">
-                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"></path>
-                    </svg>
-                </li>
-                <li class="list-inline-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                         viewBox="0 0 16 16" class="bi bi-twitter">
-                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
-                    </svg>
-                </li>
-                <li class="list-inline-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                         viewBox="0 0 16 16" class="bi bi-instagram">
-                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
-                    </svg>
-                </li>
-            </ul>
-        </div>
-    </div>
-</footer>
+
 <script src="../static/bootstrap/js/bootstrap.min.js"></script>
 <script src="../static/js/startup-modern.js"></script>
 </body>

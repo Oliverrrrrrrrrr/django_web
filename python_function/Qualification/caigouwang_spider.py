@@ -1,11 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 from pip._internal import req
+from APP.models import CGW_inquire
 
 
 # import pandas as pd
 # import lxml
 def get_cgw_data(companyName):
+    Cname_list = []
+    Presult_list = []
     companyName = companyName
 
     # 首页1
@@ -36,6 +39,8 @@ def get_cgw_data(companyName):
             if (j < 22 and a < 26):
                 print("企业名称：" + a_data[j].text)
                 print("处罚结果：" + a_data[a].text)
+                Cname_list.append(a_data[j].text)
+                Presult_list.append(a_data[a].text)
                 j = j + 10;
                 a = a + 10;
                 i += 1
@@ -46,6 +51,10 @@ def get_cgw_data(companyName):
         dd = resu_item.text.strip()
         dd = dd.replace("	", "")
         print(dd)
+        Cname_list.append(companyName)
+        Presult_list.append('无')
+
+
 
     else:
         print("-----本次共查询到 " + str(tSnum1) + " 条信息-----")
@@ -56,8 +65,19 @@ def get_cgw_data(companyName):
             print("-------第" + str(i + 1) + "条信息-------")
             print("企业名称：" + a_data[j].text)
             print("处罚结果：" + a_data[a].text)
+            Cname_list.append(a_data[j].text)
+            Presult_list.append(a_data[a].text)
             j = j + 10;
             a = a + 10;
             i += 1
+    # 保存到数据库
+    for i in range(0, tSnum):
+        cgw = CGW_inquire()
+        cgw.company_name = Cname_list[i]
+        cgw.penalty = Presult_list[i]
+        # 如果数据库中未保存，则保存
+        if not CGW_inquire.objects.filter(company_name=Cname_list[i], penalty=Presult_list[i]):
+            cgw.save()
+    return Cname_list, Presult_list
 
 # get_cgw_data('上海市机械设备成套（集团）有限公司')

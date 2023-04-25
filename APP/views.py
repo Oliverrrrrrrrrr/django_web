@@ -2,13 +2,19 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
+from django.contrib import auth
+from django.http import HttpResponseRedirect
 
 from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
+from python_function.Qualification.xyzg_spider import get_creditChina
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from python_function.Repeatability.duplicate_checking.duplicate_paragraph import dup_paragraph
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information, Seal, Qualification_person, Register_person, Duplicate
+    Shareholder_information, Seal, Qualification_person, Register_person, Duplicate, CreditChina, CGW_inquire
 
 
 # index
@@ -21,17 +27,17 @@ def register(request):
     if request.method == 'GET':
         return render(request, 'signup.html')
     elif request.method == 'POST':
-        name = request.POST.get('name')
+        username = request.POST.get('name')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         # 注册成功跳转到到登录页面，注册加判断已经存在提示改用用户已存在
         users = User.objects.all()
         for i in users:
-            if name == i.name:
+            if username == i.username:
                 return HttpResponse("用户名已存在")
         if password == password2:
             try:
-                User.objects.create(name=name, password=password)
+                User.objects.create_user(username=username, password=make_password(password))
             except Exception as e:
                 print(e)
                 return HttpResponse("注册失败")
@@ -47,24 +53,31 @@ def login(request):
     elif request.method == 'POST':
         name = request.POST.get('name')
         password = request.POST.get('password')
-        # 登录失败时需要提示是用户名不存在还是密码错误
-        try:  # 存放可能出现异常的代码 查询数据多个条件时默认是并且的关系
-            user = User.objects.get(name=name)
-            # 当输入的用户名在数据库里查询不到，说明try里面的代码存在异常
-            # 执行万能异常里面的语句
-        except Exception as e:  # 捕获异常将异常存到e里
-            print(e)
-            return HttpResponse("用户名不存在")
-
-        # 如果用户名对，就判断密码有没有输入正确
-        if password != user.password:
-            return HttpResponse("用户名和密码不匹配")
-        return redirect('/')
+        user = authenticate(username=name, password=password)
+        if user is None:
+            return HttpResponse("用户名或密码错误")
+        else:
+            auth.login(request, user)
+            request.session['username'] = name
+            resp = HttpResponseRedirect('/')
+            if 'remember' in request.POST:
+                resp.set_cookie('username', name, 3600 * 24 * 7)
+            return resp
 
 
 # logout
 def logout(request):
-    return redirect('/login/')
+    # 实现退出功能
+    # 删除session
+    if 'username' in request.session:
+        del request.session['username']
+    resp = HttpResponseRedirect('/')
+    # 删除cookie
+    if 'username' in request.COOKIES:
+        resp.delete_cookie('username')
+    auth.logout(request)
+    messages.success(request, "已退出登录")
+    return resp
 
 
 # change password
@@ -132,36 +145,46 @@ def Qualification(request):
         companyname = request.POST.get('companyname')
 
         # 天眼查
-        if Tianyancha_User.objects.filter(phone=phone):
-            tianyancha_user = Tianyancha_User.objects.get(phone=phone)
-        else:
-            tianyancha_user = Tianyancha_User.objects.create(phone=phone, password=password)
-        # 若数据库中无该公司数据则爬取
-        # if not Main_person.objects.filter(company_name=companyname):
-        try:
-            tianyancha_spider(phone, password, companyname)
-        except Exception as e:
-            print(e)
-            return HttpResponse("天眼查爬取失败")
+        # 如果数据库中已经有该企业的数据，就不再爬取
+        if not Main_person.objects.filter(company_name=companyname):
+            try:
+                tianyancha_spider(phone, password, companyname)
+            except Exception as e:
+                print(e)
+                return HttpResponse("天眼查爬取失败")
         # 找到数据库中对应企业的数据
         all_main_person = Main_person.objects.filter(company_name=companyname)
         all_project = Project.objects.filter(company_name=companyname)
         all_shareholder = Shareholder_information.objects.filter(company_name=companyname)
         all_qualification = Qualification_person.objects.filter(company_name=companyname)
         all_register_person = Register_person.objects.filter(company_name=companyname)
-        # # 采购网
-        # try:
-        #     get_cgw_data(companyname)
-        # except Exception as e:
-        #     print(e)
-        #     return HttpResponse("采购网爬取失败")
+        # 采购网（没成功）
+        if not CGW_inquire.objects.filter(company_name=companyname):
+            try:
+                get_cgw_data(companyname)
+            except Exception as e:
+                print(e)
+                return HttpResponse("采购网爬取失败")
+        cgw_data = CGW_inquire.objects.filter(company_name=companyname)
+
+        # 信用中国
+        if not CreditChina.objects.filter(entityName=companyname):
+            try:
+                M = get_creditChina(companyname)  # M为信用中国爬取的展示信息（行政信息）
+                # 将数据按照下标索引分别传输到HTML页面的td中
+                split_data = [M[i:i + 9] for i in range(0, len(M), 9)]
+
+            except Exception as e:
+                print(e)
+                return HttpResponse("信用中国爬取失败")
 
         return render(request, 'Qualification.html', {
             'all_main_person': all_main_person,
             'all_project': all_project,
             'all_shareholder': all_shareholder,
             'all_qualification': all_qualification,
-            'all_register_person': all_register_person
+            'all_register_person': all_register_person,
+            'cgw_data': cgw_data
         })
 
 
@@ -186,11 +209,11 @@ def Repeatability(request):
                 try:
                     pdf2image(pdfFile, storePath, zoom=2.0)  # pdf转图片
                     bianli_pics(pdfFile, storePath, filename)  # 遍历图片并对有印章的图片进行输出页码和提取
-                    
+
                 except Exception as e:
                     print(e)
-                    return HttpResponse("检测失败")            
-            
+                    return HttpResponse("检测失败")
+
             all_seal = Seal.objects.filter(file_title=filename)
             # 将所有页码拼接成字符串
             pages = ""
@@ -200,16 +223,17 @@ def Repeatability(request):
                 pages += seal.seal_page + ","
                 all_pages.append(seal.seal_page)
 
-            return render(request, 'Repeatability.html', {'all_seal': all_seal, 'pages': pages, 'page_len': page_len, 'all_pages': all_pages})
-        
-        
+            return render(request, 'Repeatability.html',
+                          {'all_seal': all_seal, 'pages': pages, 'page_len': page_len, 'all_pages': all_pages})
+
+
         # 重复字段检测函数接口
         elif type == '重复字段检测':
-            
+
             name_list = []
-            name_list=[]#'media/file/project_file/上海浦海测绘有限公司技术部分.pdf', 'media/file/project_file/上海祥阳水利勘测设计有限公司技术部分.pdf']
-            start_list = []#1,1]
-            end_list = []#100,30]
+            name_list = []  # 'media/file/project_file/上海浦海测绘有限公司技术部分.pdf', 'media/file/project_file/上海祥阳水利勘测设计有限公司技术部分.pdf']
+            start_list = []  # 1,1]
+            end_list = []  # 100,30]
             standard_name = []
             standard_start = []
             standard_end = []
@@ -225,7 +249,6 @@ def Repeatability(request):
             #     return HttpResponse("文件不存在")
             # 未检测过则进行检测   
 
-
             start_number = int(request.POST.get('InputMatchingStringLimit'))
             # start_number = []
             # start_number.append(start_num)
@@ -237,51 +260,51 @@ def Repeatability(request):
             standard_n = request.POST.get('InputStandardLibrary')
             # standard_n = "../file/project_file/" + standard_n#"../../../file/project_file/" + standard_n            
             file = UploadProjectFile.objects.get(title=standard_n + ".pdf")
-            
-            L = 'media/'+ str(file.path)
+
+            L = 'media/' + str(file.path)
             standard_name.append(L)
 
-            standard_s = int(request.POST.get('InputStandardStartPage'))            
+            standard_s = int(request.POST.get('InputStandardStartPage'))
             standard_start.append(standard_s)
 
-            standard_e = int(request.POST.get('InputStandardEndPage'))            
+            standard_e = int(request.POST.get('InputStandardEndPage'))
             standard_end.append(standard_e)
 
             # while importing:
             # file_name = request.POST.get('file_name')
-            
+
             # file = UploadProjectFile.objects.get(title=file_name + ".pdf")
             # M = 'media/'+ str(file.path)
             # name_list.append(M)
             file_name = request.POST.getlist('file_name')
             start_list = request.POST.getlist('InputStartPage')
             end_list = request.POST.getlist('InputEndPage')
-            
+
             for i in file_name:
                 file = UploadProjectFile.objects.get(title=i + ".pdf")
-                M = 'media/'+ str(file.path)
-                name_list.append(M) 
-            
+                M = 'media/' + str(file.path)
+                name_list.append(M)
+
             for i in range(len(file_name)):
                 start_list[i] = int(start_list[i])
-                end_list[i] = int(end_list[i])        
+                end_list[i] = int(end_list[i])
 
-            # start_page = int(request.POST.get('InputStartPage'))
+                # start_page = int(request.POST.get('InputStartPage'))
             # end_page = int(request.POST.get('InputEndPage'))
             # start_list.append(start_page)   #request.POST.getlist('InputStartPage')
             # end_list.append(end_page)
-            
+
             # name_list = request.POST.getlist('file_name')
             # start_list = request.POST.getlist('InputStartPage')
             # end_list = request.POST.getlist('InputEndPage')                  
 
             try:
-                output_str,contrast_output = dup_paragraph(standard_name,name_list,standard_start,standard_end,start_list,end_list,start_number,standard_number)
+                output_str, contrast_output = dup_paragraph(standard_name, name_list, standard_start, standard_end,
+                                                            start_list, end_list, start_number, standard_number)
             except Exception as e:
                 print(e)
                 return HttpResponse("检测失败")
             return render(request, 'Repeatability.html', {'output_str': output_str, 'contrast_output': contrast_output})
-    
 
 
 def Predict(request):
