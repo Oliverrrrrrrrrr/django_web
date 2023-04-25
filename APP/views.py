@@ -13,6 +13,7 @@ from python_function.Qualification.tianyancha_spider import tianyancha_spider
 from python_function.Qualification.xyzg_spider import get_creditChina
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from python_function.Repeatability.duplicate_checking.duplicate_paragraph import dup_paragraph
+from python_function.Predict.predict import extract_text_info, predict
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
     Shareholder_information, Seal, Qualification_person, Register_person, Duplicate, CreditChina, CGW_inquire
 
@@ -261,7 +262,7 @@ def Repeatability(request):
             # standard_n = "../file/project_file/" + standard_n#"../../../file/project_file/" + standard_n            
             file = UploadProjectFile.objects.get(title=standard_n + ".pdf")
 
-            L = 'media/' + str(file.path)
+            L = 'static/media/' + str(file.path)
             standard_name.append(L)
 
             standard_s = int(request.POST.get('InputStandardStartPage'))
@@ -282,14 +283,14 @@ def Repeatability(request):
 
             for i in file_name:
                 file = UploadProjectFile.objects.get(title=i + ".pdf")
-                M = 'media/' + str(file.path)
+                M = 'static/media/' + str(file.path)
                 name_list.append(M)
 
             for i in range(len(file_name)):
                 start_list[i] = int(start_list[i])
                 end_list[i] = int(end_list[i])
 
-                # start_page = int(request.POST.get('InputStartPage'))
+            # start_page = int(request.POST.get('InputStartPage'))
             # end_page = int(request.POST.get('InputEndPage'))
             # start_list.append(start_page)   #request.POST.getlist('InputStartPage')
             # end_list.append(end_page)
@@ -308,4 +309,20 @@ def Repeatability(request):
 
 
 def Predict(request):
-    return render(request, 'Predict.html')
+    if request.method == 'GET':
+        return render(request, 'Predict.html')
+    elif request.method == 'POST':
+        #需要检测的文件路径（单个）
+        file_name = request.POST.get('project name')
+        file = UploadProjectFile.objects.get(title=file_name + ".pdf")
+        filepath = 'static/media/' + str(file.path)
+        # pathlist = []
+        # pathlist.append(filepath)
+        
+        text = extract_text_info(filepath)
+        problist = predict(text)
+
+        prob = problist[0] * 100
+        return render(request, 'Predict.html', {'prob': prob})
+
+#津耀刻盘
