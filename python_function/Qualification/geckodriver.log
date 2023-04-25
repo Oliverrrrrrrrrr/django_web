@@ -1,0 +1,71 @@
+1682411315554	geckodriver	INFO	Listening on 127.0.0.1:6939
+1682411495712	geckodriver	INFO	Listening on 127.0.0.1:7515
+1682411498778	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "7516" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileg9UoLA"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682411500147	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682411500156	Marionette	INFO	Listening on port 7527
+Read port: 7527
+WebDriver BiDi listening on ws://127.0.0.1:7516
+1682411500361	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileg9UoLA\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+console.error: ({})
+DevTools listening on ws://127.0.0.1:7516/devtools/browser/a3a501c5-3eaf-42a8-a926-9d24fc71e3e3
+1682411656906	geckodriver	INFO	Listening on 127.0.0.1:7714
+1682411659954	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "7715" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileF6EdW9"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682411661065	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682411661072	Marionette	INFO	Listening on port 7729
+Read port: 7729
+WebDriver BiDi listening on ws://127.0.0.1:7715
+1682411661272	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileF6EdW9\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+console.error: ({})
+DevTools listening on ws://127.0.0.1:7715/devtools/browser/db354485-f327-45ad-a880-33fec3ba6032
+1682411717334	geckodriver	INFO	Listening on 127.0.0.1:7872
+1682411720372	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "7873" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileeMr7MU"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682411721090	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682411721096	Marionette	INFO	Listening on port 7886
+Read port: 7886
+WebDriver BiDi listening on ws://127.0.0.1:7873
+1682411721220	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileeMr7MU\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+console.error: ({})
+DevTools listening on ws://127.0.0.1:7873/devtools/browser/10c4d460-ccd4-4177-948d-08e23f0da069
+JavaScript warning: https://www.creditchina.gov.cn/ line 5 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.creditchina.gov.cn/js/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+JavaScript warning: https://www.creditchina.gov.cn/js/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+1682411810577	geckodriver	INFO	Listening on 127.0.0.1:8151
+1682411813645	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "8152" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileP4AmS5"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682411814480	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682411814488	Marionette	INFO	Listening on port 8159
+Read port: 8159
+WebDriver BiDi listening on ws://127.0.0.1:8152
+1682411814632	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Brace\\AppData\\Local\\Temp\\rust_mozprofileP4AmS5\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+console.error: ({})
+DevTools listening on ws://127.0.0.1:8152/devtools/browser/4d9d650b-71f4-4c4e-8710-20db629458f7
+JavaScript warning: https://www.creditchina.gov.cn/ line 5 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.creditchina.gov.cn/js/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+JavaScript warning: https://www.creditchina.gov.cn/js/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead

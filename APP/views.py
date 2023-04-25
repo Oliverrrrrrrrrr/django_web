@@ -37,7 +37,7 @@ def register(request):
                 return HttpResponse("用户名已存在")
         if password == password2:
             try:
-                User.objects.create_user(username=username, password=make_password(password))
+                User.objects.create_user(username=username, password=password)
             except Exception as e:
                 print(e)
                 return HttpResponse("注册失败")
@@ -53,9 +53,12 @@ def login(request):
     elif request.method == 'POST':
         name = request.POST.get('name')
         password = request.POST.get('password')
-        user = authenticate(username=name, password=password)
+        # 检查用户名和密码是否正确
+        user = User.objects.filter(username=name).first()
         if user is None:
-            return HttpResponse("用户名或密码错误")
+            return HttpResponse("用户名不存在")
+        elif not check_password(password, user.password):
+            return HttpResponse("密码错误")
         else:
             auth.login(request, user)
             request.session['username'] = name

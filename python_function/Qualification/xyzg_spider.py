@@ -11,20 +11,18 @@ from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 from django.conf import settings
 import os
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangoProject.settings")
 import django
-
-django.setup()
 from APP.models import CreditChina
-
-op = Options()
-op.add_argument('-headless')
-browser = webdriver.Firefox(options=op)
 
 
 # 封装函数
 def get_creditChina(companyname):
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangoProject.settings")
+    django.setup()
+    op = Options()
+    op.add_argument('-headless')
+    browser = webdriver.Firefox(options=op)
+
     M = []
     N = []
     try:
