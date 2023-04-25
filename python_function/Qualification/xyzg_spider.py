@@ -19,7 +19,7 @@ django.setup()
 from APP.models import CreditChina
 
 op = Options()
-op.binary_location = r"C:/Program Files/Mozilla Firefox/firefox.exe"
+#op.binary_location = r"C:/Program Files/Mozilla Firefox/firefox.exe"
 op.add_argument('-headless')
 browser = webdriver.Firefox(options=op)
 
