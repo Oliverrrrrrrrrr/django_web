@@ -93,13 +93,13 @@ def change_password(request):
         password2 = request.POST.get('password2')
         password3 = request.POST.get('password3')
         try:
-            user = User.objects.get(name=name)
+            user = User.objects.get(username=name)
         except:
             return HttpResponse("用户名不存在")
         if check_password(password, user.password):
             if password2 == password3:
-                password2 = make_password(password2)
-                user.password = password2
+                # 修改密码
+                user.set_password(password2)
                 user.save()
                 return redirect('/login/')
             else:
