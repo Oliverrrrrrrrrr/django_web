@@ -1,9 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+
+# from django.contrib.auth import settings
 
 
 # Create your models here.
 
-class User(models.Model):
+class MyUser(models.Model):
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")
     name = models.CharField(max_length=80, verbose_name='用户名', null=False, blank=False, unique=True)
     password = models.CharField(max_length=80, verbose_name='密码', null=False, blank=False)
 
@@ -12,16 +17,14 @@ class User(models.Model):
         verbose_name = u'用户'
         verbose_name_plural = u'用户'
 
-    def __unicode__(self):
-        return self.name
-
     def __str__(self):
-        return self.name
+        return self.user_id
 
 
 class Tianyancha_User(models.Model):
     phone = models.CharField(max_length=80, verbose_name='手机号', null=False, blank=False, unique=True)
     password = models.CharField(max_length=80, verbose_name='密码', null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")
 
     class Meta:
         db_table = u'tianyancha_user'
@@ -159,9 +162,10 @@ class Seal(models.Model):
 
     def __str__(self):
         return self.file_title
-    
+
+
 class Duplicate(models.Model):
-    file_pair = models.CharField(max_length=100, verbose_name='文件对')   
+    file_pair = models.CharField(max_length=100, verbose_name='文件对')
     dup_page = models.CharField(max_length=100, verbose_name='重复页位置')
     dup_content = models.CharField(max_length=500, verbose_name='重复段内容')
     standard_lib = models.FileField(upload_to='file/Standard_Lib', verbose_name='标准库')
@@ -174,7 +178,7 @@ class Duplicate(models.Model):
         verbose_name_plural = u'重复段'
 
     def __str__(self):
-        return self.file_title
+        return self.file_pair
 
 
 # 文书网用户
@@ -220,10 +224,12 @@ class CGW_inquire(models.Model):
 
     def __str__(self):
         return self.company_name
-#信用中国
+
+
+# 信用中国
 class CreditChina(models.Model):
     entityName = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
-                                    default='default_value')
+                                  default='default_value')
     administration_management = models.CharField(max_length=80, verbose_name='行政管理', null=False, blank=False)
     honesty_trustworthiness = models.CharField(max_length=80, verbose_name='诚信守信', null=False, blank=False)
     Serious_untrustworthy = models.CharField(max_length=80, verbose_name='严重失信主体名单', null=False, blank=False)
