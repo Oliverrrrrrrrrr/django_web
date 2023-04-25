@@ -6,6 +6,8 @@ from pip._internal import req
 # import pandas as pd
 # import lxml
 def get_cgw_data(companyName):
+    Cname_list = []
+    Presult_list = []
     companyName = companyName
 
     # 首页1
@@ -36,6 +38,8 @@ def get_cgw_data(companyName):
             if (j < 22 and a < 26):
                 print("企业名称：" + a_data[j].text)
                 print("处罚结果：" + a_data[a].text)
+                Cname_list.append(a_data[j].text)
+                Presult_list.append(a_data[a].text)
                 j = j + 10;
                 a = a + 10;
                 i += 1
@@ -46,6 +50,8 @@ def get_cgw_data(companyName):
         dd = resu_item.text.strip()
         dd = dd.replace("	", "")
         print(dd)
+        Cname_list.append('无')
+        Presult_list.append('无')
 
     else:
         print("-----本次共查询到 " + str(tSnum1) + " 条信息-----")
@@ -56,8 +62,10 @@ def get_cgw_data(companyName):
             print("-------第" + str(i + 1) + "条信息-------")
             print("企业名称：" + a_data[j].text)
             print("处罚结果：" + a_data[a].text)
+            Cname_list.append(a_data[j].text)
+            Presult_list.append(a_data[a].text)
             j = j + 10;
             a = a + 10;
             i += 1
-
+    return Cname_list, Presult_list
 # get_cgw_data('上海市机械设备成套（集团）有限公司')

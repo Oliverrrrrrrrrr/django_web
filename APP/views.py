@@ -5,10 +5,11 @@ from django.contrib import messages
 
 from python_function.Qualification.caigouwang_spider import get_cgw_data
 from python_function.Qualification.tianyancha_spider import tianyancha_spider
+from python_function.Qualification.xyzg_spider import get_creditChina
 from python_function.Repeatability.seal_detect.signiture_detect import bianli_pics, pdf2image
 from python_function.Repeatability.duplicate_checking.duplicate_paragraph import dup_paragraph
 from .models import User, Project, Main_person, Tianyancha_User, UploadProjectFile, UploadTestFile, \
-    Shareholder_information, Seal, Qualification_person, Register_person, Duplicate
+    Shareholder_information, Seal, Qualification_person, Register_person, Duplicate, CreditChina
 
 
 # index
@@ -149,19 +150,32 @@ def Qualification(request):
         all_shareholder = Shareholder_information.objects.filter(company_name=companyname)
         all_qualification = Qualification_person.objects.filter(company_name=companyname)
         all_register_person = Register_person.objects.filter(company_name=companyname)
-        # # 采购网
-        # try:
-        #     get_cgw_data(companyname)
-        # except Exception as e:
-        #     print(e)
-        #     return HttpResponse("采购网爬取失败")
+        # 采购网（没成功）
+        try:
+            Cname_list = get_cgw_data(companyname)
+
+        except Exception as e:
+            print(e)
+            return HttpResponse("采购网爬取失败")
+
+        # 信用中国
+        if not CreditChina.objects.filter(entityName=companyname):
+            try:
+                M = get_creditChina(companyname)#M为信用中国爬取的展示信息（行政信息）
+                # 将数据按照下标索引分别传输到HTML页面的td中
+                split_data = [M[i:i + 9] for i in range(0, len(M), 9)]
+
+            except Exception as e:
+                print(e)
+                return HttpResponse("信用中国爬取失败")
 
         return render(request, 'Qualification.html', {
             'all_main_person': all_main_person,
             'all_project': all_project,
             'all_shareholder': all_shareholder,
             'all_qualification': all_qualification,
-            'all_register_person': all_register_person
+            'all_register_person': all_register_person,
+            'split_data': split_data
         })
 
 

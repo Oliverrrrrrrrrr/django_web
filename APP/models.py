@@ -220,3 +220,23 @@ class CGW_inquire(models.Model):
 
     def __str__(self):
         return self.company_name
+#信用中国
+class CreditChina(models.Model):
+    entityName = models.CharField(max_length=80, verbose_name='企业名称', null=False, blank=False,
+                                    default='default_value')
+    administration_management = models.CharField(max_length=80, verbose_name='行政管理', null=False, blank=False)
+    honesty_trustworthiness = models.CharField(max_length=80, verbose_name='诚信守信', null=False, blank=False)
+    Serious_untrustworthy = models.CharField(max_length=80, verbose_name='严重失信主体名单', null=False, blank=False)
+    Abnormal_operation = models.CharField(max_length=80, verbose_name='经营异常', null=False, blank=False)
+    Credit_commitment = models.CharField(max_length=80, verbose_name='信用承诺', null=False, blank=False)
+    Credit_rating = models.CharField(max_length=80, verbose_name='信用评价', null=False, blank=False)
+    Judicial_judgment = models.CharField(max_length=80, verbose_name='司法判决', null=False, blank=False)
+    others = models.CharField(max_length=80, verbose_name='其他', null=False, blank=False)
+
+    class Meta:
+        db_table = u'credit_china'
+        verbose_name = u'信用中国'
+        verbose_name_plural = u'信用中国'
+
+    def __str__(self):
+        return self.entityName
